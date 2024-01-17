@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="AESC_Eyeshot_Viewer.View.MainTabHeaderView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AESC_Eyeshot_Viewer.View"
+             xmlns:viewModels="clr-namespace:AESC_Eyeshot_Viewer.ViewModel"
+             mc:Ignorable="d" 
+             d:DesignHeight="23" d:DesignWidth="100">
+    <UserControl.DataContext>
+        <viewModels:MainTabHeaderViewModel />
+    </UserControl.DataContext>
+    <StackPanel Orientation="Horizontal">
+        <Label Width="80" Content="{Binding Header}" />
+        <Button Width="20" Name="CloseButton" Content="X" Click="CloseButton_Click" />
+    </StackPanel>
+</UserControl>

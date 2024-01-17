@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="AESC_Eyeshot_Viewer.View.EyeshotTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AESC_Eyeshot_Viewer.View"
+             xmlns:viewModel="clr-namespace:AESC_Eyeshot_Viewer.ViewModel"
+             mc:Ignorable="d" 
+             PreviewKeyDown="UserControl_PreviewKeyDown"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewModel:EyeshotTabViewModel />
+    </UserControl.DataContext>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="109*"/>
+            <ColumnDefinition Width="291*"/>
+        </Grid.ColumnDefinitions>
+        <local:EyeshotTreeViewer Grid.Column="0" x:Name="TreeView" />
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="419*"/>
+                <RowDefinition Height="30*"/>
+            </Grid.RowDefinitions>
+            <local:EyeshotDesignView Grid.Row="0" x:Name="DesignView" />
+            <TextBlock 
+                Name="SelectionDataTextBlock"
+                Grid.Row="1" 
+                Text="{Binding SelectedEntityInformationText}" 
+                Margin="50, 0" 
+                VerticalAlignment="Center" 
+                FontStyle="Italic"
+                TextWrapping="Wrap"/>
+        </Grid>
+
+    </Grid>
+</UserControl>
