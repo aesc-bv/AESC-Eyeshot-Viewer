@@ -17,6 +17,8 @@
     <drafting:Drafting2D 
         DockPanel.Dock="Top" 
         x:Name="DraftDesign" 
+        SelectionChanged="DraftDesign_SelectionChanged"
+        MouseDown="DraftDesign_MouseDown"
         WorkCompleted="DraftDesign_WorkCompleted" 
         AllowDrop="True"
         DragEnter="DraftDesign_DragEnter" 

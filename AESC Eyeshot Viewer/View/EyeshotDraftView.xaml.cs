@@ -1,9 +1,12 @@
-﻿using AESC_Eyeshot_Viewer.Interfaces;
+﻿using AESC_Eyeshot_Viewer.Events;
+using AESC_Eyeshot_Viewer.Interfaces;
 using AESC_Eyeshot_Viewer.ViewModel;
 using devDept.CustomControls;
 using devDept.Eyeshot;
+using devDept.Eyeshot.Control;
 using devDept.Eyeshot.Entities;
 using devDept.Eyeshot.Translators;
+using devDept.Graphics;
 using System;
 using System.IO;
 using System.Linq;
@@ -19,7 +22,46 @@ namespace AESC_Eyeshot_Viewer.View
     public partial class EyeshotDraftView : UserControl, IEyeshotDesignView
     {
         public event EyeshotDesignLoadCompleted EyeshotDesignLoadComplete;
-        public EyeshotDraftView() => InitializeComponent();
+        public EyeshotDraftView()
+        {
+            InitializeComponent();
+
+            DraftDesign.ActionMode = actionType.SelectByPick;
+            DraftDesign.AssemblySelectionMode = Workspace.assemblySelectionType.Leaf;
+        }
+
+        private void DraftDesign_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed && !DraftDesign.IsBusy)
+            {
+                var location = RenderContextUtility.ConvertPoint(DraftDesign.GetMousePosition(e));
+                var selectedItem = DraftDesign.GetItemUnderMouseCursor(location);
+
+                if (selectedItem != null && selectedItem.Item is Entity)
+                    DesignViewEvents
+                        .InvokeEntityWasSelectedEvent(this, new Events.EntityWasSelectedEventArgs
+                        {
+                            Entity = selectedItem.Item as Entity,
+                        });
+                
+            }
+        }
+
+        private void DraftDesign_SelectionChanged(object sender, devDept.Eyeshot.Control.SelectionChangedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Selection changed!");
+            foreach (var removedItem in e.RemovedItems)
+                GetDataContext().SelectedDesignItems.Remove(removedItem);
+
+            foreach (var addedItem in e.AddedItems)
+                GetDataContext().SelectedDesignItems.Add(addedItem);
+
+            System.Diagnostics.Debug.WriteLine($"Selected entities: {GetDataContext().SelectedDesignItems.Count}");
+            if (GetDataContext().SelectedDesignItems.Count == 1)
+                DesignViewEvents
+                    .InvokeEntityWasSelectedEvent(this, new Events.EntityWasSelectedEventArgs 
+                        { Entity = GetDataContext().SelectedDesignItems.First().Item as Entity });
+        }
 
         private void DraftDesign_WorkCompleted(object sender, devDept.WorkCompletedEventArgs e)
         {

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace AESC_Eyeshot_Viewer.ViewModel
 {
@@ -18,6 +19,7 @@ namespace AESC_Eyeshot_Viewer.ViewModel
         private readonly string[] dwgExtensions = new string[] { ".dwg" };
         public string LoadedFilePath { get; set; } = string.Empty;
         public string LoadedFileName { get; set; } = string.Empty;
+        public List<SelectedItem> SelectedDesignItems { get; } = new List<SelectedItem>();
 
         public bool IsLoaded { get; set; } = false;
 
