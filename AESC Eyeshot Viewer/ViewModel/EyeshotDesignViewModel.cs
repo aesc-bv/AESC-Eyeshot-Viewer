@@ -1,19 +1,10 @@
 ﻿using devDept.Eyeshot.Control;
 using devDept.Eyeshot.Translators;
 using devDept.Eyeshot;
-using devDept;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Runtime.Remoting.Contexts;
-using AESC_Eyeshot_Viewer.View;
-using System.Runtime.Remoting.Channels;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows.Threading;
 using System.Threading;
 
@@ -55,7 +46,22 @@ namespace AESC_Eyeshot_Viewer.ViewModel
                 if (fileReader is null) return string.Empty;
 
                 design.Clear();
-                design.StartWork(fileReader);
+
+                Dispatcher.CurrentDispatcher.InvokeAsync(() =>
+                {
+                    var counter = 0;
+                    while (design.IsBusy && counter < 50)
+                        Thread.Sleep(100);
+
+                    try
+                    {
+                        design.StartWork(fileReader);
+                    } catch 
+                    {
+                        MessageBox.Show("Could not load file, because other tasks were running in parallel. Please wait a bit and try again");
+                    }
+                    
+                });
 
                 LoadedFilePath = filePath;
                 LoadedFileName = Path.GetFileNameWithoutExtension(filePath);

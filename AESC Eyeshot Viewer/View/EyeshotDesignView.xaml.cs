@@ -12,13 +12,14 @@ using devDept.Geometry;
 using devDept.Graphics;
 using System.Windows.Forms;
 using System.Windows.Input;
+using AESC_Eyeshot_Viewer.Interfaces;
 
 namespace AESC_Eyeshot_Viewer.View
 {
     /// <summary>
     /// Interaction logic for EyeshotDesignView.xaml
     /// </summary>
-    public partial class EyeshotDesignView : System.Windows.Controls.UserControl
+    public partial class EyeshotDesignView : System.Windows.Controls.UserControl, IEyeshotDesignView
     {
         public bool IsMeasureModeActive { get; set; } = false;
         public bool IsMeasureVisible { get; set; } = false;
@@ -207,6 +208,8 @@ namespace AESC_Eyeshot_Viewer.View
             }
                 
         }
+
+        public EyeshotDesignViewModel GetDataContext() => DataContext as EyeshotDesignViewModel;
     }
 
     public class EntityWasSelectedEventArgs

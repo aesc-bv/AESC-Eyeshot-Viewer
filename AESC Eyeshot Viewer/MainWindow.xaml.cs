@@ -24,6 +24,7 @@ using System.ComponentModel;
 using System.Runtime.Remoting.Contexts;
 using System.CodeDom.Compiler;
 using System.Threading;
+using AESC_Eyeshot_Viewer.Interfaces;
 
 namespace AESC_Eyeshot_Viewer
 {
@@ -79,23 +80,16 @@ namespace AESC_Eyeshot_Viewer
 
                     var fileType = context.GetFileTypeOf(filePath);
 
-                    UserControl newTabView;
+                    IEyeshotTabView newTabView;
                     if (fileType == FileType.File2D)
-                    {
                         newTabView = new Eyeshot2DTabView();
-                        (newTabView as Eyeshot2DTabView).DraftView.EyeshotDesignLoadComplete += DesignView_EyeshotDesignLoadComplete;
-                        var newTabContext = ((newTabView as Eyeshot2DTabView).DraftView.DataContext as EyeshotDesignViewModel);
-                        newTabContext.LoadedFilePath = loadedFile.Path;
-                        newTabContext.LoadedFileName = loadedFile.Name;
-                    }
                     else
-                    {
                         newTabView = new EyeshotTabView();
-                        (newTabView as EyeshotTabView).DesignView.EyeshotDesignLoadComplete += DesignView_EyeshotDesignLoadComplete;
-                        var newTabContext = ((newTabView as EyeshotTabView).DesignView.DataContext as EyeshotDesignViewModel);
-                        newTabContext.LoadedFilePath = loadedFile.Path;
-                        newTabContext.LoadedFileName = loadedFile.Name;
-                    }
+
+                    newTabView.GetEyeshotView().EyeshotDesignLoadComplete += DesignView_EyeshotDesignLoadComplete;
+                    var newTabContext = newTabView.GetEyeshotView().GetDataContext();
+                    newTabContext.LoadedFilePath = loadedFile.Path;
+                    newTabContext.LoadedFileName = loadedFile.Name;
 
                     var newTabHeader = new MainTabHeaderView(loadedFile.Name, MainTabControl.Items.Count);
                     newTabHeader.CloseTabEvent += NewTabHeader_CloseTabEvent;

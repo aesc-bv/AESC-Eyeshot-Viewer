@@ -1,4 +1,5 @@
-﻿using AESC_Eyeshot_Viewer.ViewModel;
+﻿using AESC_Eyeshot_Viewer.Interfaces;
+using AESC_Eyeshot_Viewer.ViewModel;
 using devDept.CustomControls;
 using devDept.Eyeshot;
 using devDept.Eyeshot.Entities;
@@ -15,7 +16,7 @@ namespace AESC_Eyeshot_Viewer.View
     /// <summary>
     /// Interaction logic for EyeshotDraftView.xaml
     /// </summary>
-    public partial class EyeshotDraftView : UserControl
+    public partial class EyeshotDraftView : UserControl, IEyeshotDesignView
     {
         public event EyeshotDesignLoadCompleted EyeshotDesignLoadComplete;
         public EyeshotDraftView() => InitializeComponent();
@@ -128,5 +129,7 @@ namespace AESC_Eyeshot_Viewer.View
                 }
             }
         }
+
+        public EyeshotDesignViewModel GetDataContext() => DataContext as EyeshotDesignViewModel;
     }
 }

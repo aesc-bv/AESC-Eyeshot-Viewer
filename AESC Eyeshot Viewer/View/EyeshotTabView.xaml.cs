@@ -1,4 +1,5 @@
-﻿using AESC_Eyeshot_Viewer.ViewModel;
+﻿using AESC_Eyeshot_Viewer.Interfaces;
+using AESC_Eyeshot_Viewer.ViewModel;
 using devDept.Eyeshot.Entities;
 using System.Linq;
 using System.Windows.Controls;
@@ -9,7 +10,7 @@ namespace AESC_Eyeshot_Viewer.View
     /// <summary>
     /// Interaction logic for EyeshotTabView.xaml
     /// </summary>
-    public partial class EyeshotTabView : UserControl
+    public partial class EyeshotTabView : UserControl, IEyeshotTabView
     {
         public EyeshotTabView()
         {
@@ -20,6 +21,8 @@ namespace AESC_Eyeshot_Viewer.View
 
             DesignView.EntityWasSelected += DesignView_EntityWasSelected;
         }
+
+        public UserControl GetEyeshotView() => DesignView;
 
         private void DesignView_EntityWasSelected(object sender, EntityWasSelectedEventArgs e)
         {
@@ -39,6 +42,11 @@ namespace AESC_Eyeshot_Viewer.View
             }
             else if (e.Entity is devDept.Eyeshot.Entities.Line lineEntity && lineEntity.IsLinear(0.5, out var lineEntityLine))
                 context.SetLengthInformationString(lineEntityLine.Length);
+        }
+
+        IEyeshotDesignView IEyeshotTabView.GetEyeshotView()
+        {
+            throw new System.NotImplementedException();
         }
 
         private void UserControl_PreviewKeyDown(object sender, KeyEventArgs e)
