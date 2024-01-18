@@ -22,8 +22,6 @@ namespace AESC_Eyeshot_Viewer.View
             DesignView.EntityWasSelected += DesignView_EntityWasSelected;
         }
 
-        public UserControl GetEyeshotView() => DesignView;
-
         private void DesignView_EntityWasSelected(object sender, EntityWasSelectedEventArgs e)
         {
             var context = DataContext as EyeshotTabViewModel;
@@ -40,14 +38,11 @@ namespace AESC_Eyeshot_Viewer.View
                 else
                     context.SetLengthInformationString(curvedEntity.Length());
             }
-            else if (e.Entity is devDept.Eyeshot.Entities.Line lineEntity && lineEntity.IsLinear(0.5, out var lineEntityLine))
+            else if (e.Entity is Line lineEntity && lineEntity.IsLinear(0.5, out var lineEntityLine))
                 context.SetLengthInformationString(lineEntityLine.Length);
         }
 
-        IEyeshotDesignView IEyeshotTabView.GetEyeshotView()
-        {
-            throw new System.NotImplementedException();
-        }
+        public IEyeshotDesignView GetEyeshotView() => DesignView;
 
         private void UserControl_PreviewKeyDown(object sender, KeyEventArgs e)
         {
