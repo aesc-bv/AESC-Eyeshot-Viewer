@@ -17,7 +17,15 @@ namespace AESC_Eyeshot_Viewer.ViewModel
     {
         public List<EyeshotFile> Files { get; } = new List<EyeshotFile>();
         public int FilesLoaded = 0;
-        private string[] AcceptableExtensions { get; } = new string[] { ".stp", ".step" };
+        private string[] AcceptableExtensions { get; } = new string[] { ".stp", ".step", ".dxf" };
         public bool IsExtensionAcceptable(string extension) => AcceptableExtensions.Contains(extension.ToLower());
+        public FileType GetFileTypeOf(string filePath) => Path.GetExtension(filePath).ToLower() == ".dxf" ? FileType.File2D : FileType.File3D;
+        
+    }
+
+    public enum FileType
+    {
+        File3D,
+        File2D,
     }
 }

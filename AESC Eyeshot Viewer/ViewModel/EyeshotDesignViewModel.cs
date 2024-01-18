@@ -14,12 +14,17 @@ using AESC_Eyeshot_Viewer.View;
 using System.Runtime.Remoting.Channels;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Threading;
+using System.Threading;
 
 namespace AESC_Eyeshot_Viewer.ViewModel
 {
     public class EyeshotDesignViewModel
     {
         private string[] AcceptableExtensions { get; } = new string[] { ".stp", ".step" };
+        private readonly string[] stepExtensions = new string[] { ".stp", ".step" };
+        private readonly string[] dxfExtensions = new string[] { ".dxf" };
+        private readonly string[] dwgExtensions = new string[] { ".dwg" };
         public string LoadedFilePath { get; set; } = string.Empty;
         public string LoadedFileName { get; set; } = string.Empty;
 
@@ -32,15 +37,25 @@ namespace AESC_Eyeshot_Viewer.ViewModel
 
         public EntityList EntityList { get; set; } = new EntityList();
 
-        public string ImportFileSTP(string filePath, Design design)
+        public string ImportFile(string filePath, Design design)
         {
             if (File.Exists(filePath))
             {
-                var stepReader = new ReadSTEP(filePath);
-                if (stepReader is null) return string.Empty;
+                ReadFileAsync fileReader;
+
+                if (stepExtensions.Contains(Path.GetExtension(filePath).ToLower()))
+                    fileReader = new ReadSTEP(filePath);
+                else if (dxfExtensions.Contains(Path.GetExtension(filePath).ToLower()))
+                    fileReader = new ReadDXF(filePath);
+                else if (dwgExtensions.Contains(Path.GetExtension(filePath).ToLower()))
+                    fileReader = new ReadDWG(filePath);
+                else
+                    throw new InvalidDataException($"Given file extension is not valid: { Path.GetExtension(filePath) }");
+
+                if (fileReader is null) return string.Empty;
 
                 design.Clear();
-                design.StartWork(stepReader);
+                design.StartWork(fileReader);
 
                 LoadedFilePath = filePath;
                 LoadedFileName = Path.GetFileNameWithoutExtension(filePath);

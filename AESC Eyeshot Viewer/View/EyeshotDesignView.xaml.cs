@@ -92,7 +92,7 @@ namespace AESC_Eyeshot_Viewer.View
                 return;
             }
 
-            Design.Viewports.FirstOrDefault()?.SetView(viewType.Trimetric);
+            Design.Viewports.FirstOrDefault()?.SetView(viewType.Front);
             Design.ZoomFit(90);
             Design.Invalidate();
         }
@@ -192,7 +192,20 @@ namespace AESC_Eyeshot_Viewer.View
         {
             var context = DataContext as EyeshotDesignViewModel;
             if (context.LoadedFileName != string.Empty && File.Exists(context.LoadedFilePath))
-                context.ImportFileSTP(context.LoadedFilePath, Design);
+            {
+                try
+                {
+                    var importResult = context.ImportFile(context.LoadedFilePath, Design);
+
+                    if (importResult == string.Empty)
+                        System.Windows.MessageBox.Show("Could not open this file in the viewer, try again later", "Open failure", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (InvalidDataException exception)
+                {
+                    System.Windows.MessageBox.Show(exception.Message, "File format error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+                
         }
     }
 

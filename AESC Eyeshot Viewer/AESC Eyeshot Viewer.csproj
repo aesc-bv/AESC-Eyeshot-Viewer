@@ -73,8 +73,14 @@
     <Compile Include="ViewModel\MainTabHeaderViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\MeasureSupportingEyeshotDesign.cs" />
+    <Compile Include="View\Eyeshot2DTabView.xaml.cs">
+      <DependentUpon>Eyeshot2DTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\EyeshotDesignView.xaml.cs">
       <DependentUpon>EyeshotDesignView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\EyeshotDraftView.xaml.cs">
+      <DependentUpon>EyeshotDraftView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\EyeshotTabView.xaml.cs">
       <DependentUpon>EyeshotTabView.xaml</DependentUpon>
@@ -101,7 +107,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\Eyeshot2DTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\EyeshotDesignView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\EyeshotDraftView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
