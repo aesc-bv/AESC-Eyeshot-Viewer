@@ -6,12 +6,14 @@ using devDept.Eyeshot;
 using devDept.Eyeshot.Control;
 using devDept.Eyeshot.Entities;
 using devDept.Eyeshot.Translators;
+using devDept.Geometry;
 using devDept.Graphics;
 using System;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using static AESC_Eyeshot_Viewer.View.EyeshotDesignView;
 
 namespace AESC_Eyeshot_Viewer.View
@@ -22,6 +24,8 @@ namespace AESC_Eyeshot_Viewer.View
     public partial class EyeshotDraftView : UserControl, IEyeshotDesignView
     {
         public event EyeshotDesignLoadCompleted EyeshotDesignLoadComplete;
+        public bool IsMeasureModeActive { get; set; } = false;
+        public bool IsMeasureVisible { get; set; } = false;
         public EyeshotDraftView()
         {
             InitializeComponent();
@@ -30,37 +34,72 @@ namespace AESC_Eyeshot_Viewer.View
             DraftDesign.AssemblySelectionMode = Workspace.assemblySelectionType.Leaf;
         }
 
-        private void DraftDesign_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void DraftDesign_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed && !DraftDesign.IsBusy)
+            if (e.LeftButton == MouseButtonState.Pressed && !DraftDesign.IsBusy)
             {
                 var location = RenderContextUtility.ConvertPoint(DraftDesign.GetMousePosition(e));
                 var selectedItem = DraftDesign.GetItemUnderMouseCursor(location);
+                DraftDesign.PointA = DraftDesign.ScreenToWorld(location);
 
-                if (selectedItem != null && selectedItem.Item is Entity)
+                if (selectedItem != null && selectedItem.Item is Entity entity)
+                {
+                    if (selectedItem.HasParents())
+                    {
+                        var transformation = new Identity() as Transformation;
+                        // Apply parent's transformation to entity
+                        for (int i = 0; i < selectedItem.Parents.Count; i++)
+                            transformation = selectedItem.Parents.ElementAt(i).GetFullTransformation(DraftDesign.Blocks) * transformation;
+
+                        entity.TransformBy(transformation);
+                    }
+
                     DesignViewEvents
                         .InvokeEntityWasSelectedEvent(this, new Events.EntityWasSelectedEventArgs
                         {
-                            Entity = selectedItem.Item as Entity,
+                            Entity = entity,
                         });
-                
+
+                    if (IsMeasureModeActive)
+                    {
+                        if (entity is Line line)
+                        {
+                            entity = line.GetNurbsForm();
+                            entity.LineWeightMethod = colorMethodType.byEntity;
+                            entity.LineWeight = 5.0f;
+                        }
+                        else if (entity is Arc arc)
+                        {
+                            entity = arc.GetNurbsForm();
+                            entity.LineWeightMethod = colorMethodType.byEntity;
+                            entity.LineWeight = 5.0f;
+                        }
+                        else if (entity is Circle circle)
+                        {
+                            entity = circle.GetNurbsForm();
+                            entity.LineWeightMethod = colorMethodType.byEntity;
+                            entity.LineWeight = 5.0f;
+                        }
+
+                        if (DraftDesign.Entity1 == null)
+                        {
+                            DraftDesign.ResetPoints();
+                            DraftDesign.Entity1 = entity;
+                        }
+                        else
+                        {
+                            DraftDesign.Entity2 = entity;
+                            var minimumDistance = new MinimumDistance(DraftDesign.Entity1, DraftDesign.Entity2);
+                            DraftDesign.ActionMode = actionType.None;
+                            DraftDesign.StartWork(minimumDistance);
+                        }
+                    }
+                }
+                    
+                else if (selectedItem is null)
+                    DesignViewEvents
+                        .InvokeEntityWasSelectedEvent(this, new Events.EntityWasSelectedEventArgs());
             }
-        }
-
-        private void DraftDesign_SelectionChanged(object sender, devDept.Eyeshot.Control.SelectionChangedEventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("Selection changed!");
-            foreach (var removedItem in e.RemovedItems)
-                GetDataContext().SelectedDesignItems.Remove(removedItem);
-
-            foreach (var addedItem in e.AddedItems)
-                GetDataContext().SelectedDesignItems.Add(addedItem);
-
-            System.Diagnostics.Debug.WriteLine($"Selected entities: {GetDataContext().SelectedDesignItems.Count}");
-            if (GetDataContext().SelectedDesignItems.Count == 1)
-                DesignViewEvents
-                    .InvokeEntityWasSelectedEvent(this, new Events.EntityWasSelectedEventArgs 
-                        { Entity = GetDataContext().SelectedDesignItems.First().Item as Entity });
         }
 
         private void DraftDesign_WorkCompleted(object sender, devDept.WorkCompletedEventArgs e)
@@ -110,25 +149,21 @@ namespace AESC_Eyeshot_Viewer.View
             }
 
             else if (e.WorkUnit is Regeneration)
-            {
-                System.Diagnostics.Debug.WriteLine("Regenerating design view");
                 DraftDesign.UpdateBoundingBox();
-            }
-            /*else if (e.WorkUnit is MinimumDistance minimumDistance)
+            else if (e.WorkUnit is MinimumDistance minimumDistance)
             {
-                Design.PointA = minimumDistance.PtA;
-                Design.PointB = minimumDistance.PtB;
-                Design.Distance = minimumDistance.Distance;
+                DraftDesign.PointA = minimumDistance.PtA;
+                DraftDesign.PointB = minimumDistance.PtB;
+                DraftDesign.Distance = minimumDistance.Distance;
 
-                Design.ZoomToPoints();
-                Design.ResetSelection();
-                Design.Entities.ClearSelection();
+                DraftDesign.ResetSelection();
+                DraftDesign.Entities.ClearSelection();
 
-                Design.ActionMode = actionType.SelectVisibleByPickDynamic;
+                DraftDesign.ActionMode = actionType.SelectVisibleByPickDynamic;
 
                 IsMeasureVisible = true;
                 return;
-            }*/
+            }
         }
 
         private void DraftDesign_DragEnter(object sender, DragEventArgs e)
@@ -173,5 +208,19 @@ namespace AESC_Eyeshot_Viewer.View
         }
 
         public EyeshotDesignViewModel GetDataContext() => DataContext as EyeshotDesignViewModel;
+
+        private void DraftDesign_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.M)
+            {
+                IsMeasureModeActive = !IsMeasureModeActive;
+
+                if (IsMeasureVisible && !IsMeasureModeActive)
+                {
+                    DraftDesign.ResetPoints();
+                    DraftDesign.ResetSelection();
+                }
+            }
+        }
     }
 }

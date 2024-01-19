@@ -10,14 +10,13 @@ namespace AESC_Eyeshot_Viewer.ViewModel
 {
     internal class EyeshotTabViewModel : INotifyPropertyChanged
     {
-        private const string _defaultInfoText = "This pane shows information about your selection";
+        private const string _defaultInfoText = "Click on any line, curve, or object to see information regarding your selection";
         private string _selectedEntityInformationText;
+        private string _selectedEntityLengthInformationText;
+        private string _selectedEntityRadiusInformationText;
         public string SelectedEntityInformationText
         {
-            get
-            {
-                return _selectedEntityInformationText;
-            }
+            get => _selectedEntityInformationText;
             set
             {
                 _selectedEntityInformationText = value;
@@ -25,10 +24,34 @@ namespace AESC_Eyeshot_Viewer.ViewModel
             }
         }
 
+        public string SelectedEntityLengthInformationText
+        {
+            get => _selectedEntityLengthInformationText;
+            set
+            {
+                _selectedEntityLengthInformationText = value == string.Empty ? "" : $"Lengte: {value}";
+                NotifyPropertyChanged();
+            }
+        }
+
+        public string SelectedEntityRadiusInformationText
+        {
+            get => _selectedEntityRadiusInformationText;
+            set
+            {
+                _selectedEntityRadiusInformationText = value == string.Empty ? "" : $"Radius: {value}";
+                NotifyPropertyChanged();
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public EyeshotTabViewModel(string selectedEntityInformationText = _defaultInfoText) 
-            => SelectedEntityInformationText = selectedEntityInformationText;
+        public EyeshotTabViewModel(string selectedEntityInformationText = _defaultInfoText)
+        {
+            SelectedEntityInformationText = selectedEntityInformationText;
+            _selectedEntityLengthInformationText = selectedEntityInformationText;
+            NotifyPropertyChanged(nameof(SelectedEntityLengthInformationText));
+        }
 
         public EyeshotTabViewModel() => SelectedEntityInformationText = _defaultInfoText;
 

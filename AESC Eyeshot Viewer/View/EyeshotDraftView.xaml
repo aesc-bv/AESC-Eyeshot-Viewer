@@ -14,11 +14,11 @@
         <viewModel:EyeshotDesignViewModel />
     </UserControl.DataContext>
     
-    <drafting:Drafting2D 
+    <viewModel:MeasureSupporting2DEyeshotDesign 
         DockPanel.Dock="Top" 
         x:Name="DraftDesign" 
-        SelectionChanged="DraftDesign_SelectionChanged"
         MouseDown="DraftDesign_MouseDown"
+        KeyDown="DraftDesign_KeyDown"
         WorkCompleted="DraftDesign_WorkCompleted" 
         AllowDrop="True"
         DragEnter="DraftDesign_DragEnter" 
@@ -53,5 +53,5 @@
                 </ddes:Viewport.ToolBars>
             </ddes:Viewport>
         </ddes:Design.Viewports>
-    </drafting:Drafting2D>
+    </viewModel:MeasureSupporting2DEyeshotDesign>
 </UserControl>

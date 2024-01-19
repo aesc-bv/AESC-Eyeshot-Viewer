@@ -1,7 +1,5 @@
 ﻿using AESC_Eyeshot_Viewer.Interfaces;
 using AESC_Eyeshot_Viewer.ViewModel;
-using devDept.Eyeshot.Control;
-using devDept.Eyeshot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,23 +29,53 @@ namespace AESC_Eyeshot_Viewer.View
             InitializeComponent();
 
             DesignViewEvents.EntityWasSelected += DesignViewEvents_EntityWasSelected;
+            LayerView.Workspace = DraftView.DraftDesign;
         }
 
         private void DesignViewEvents_EntityWasSelected(object sender, Events.EntityWasSelectedEventArgs e)
         {
             if (sender is EyeshotDraftView)
             {
-                if (e.Entity is devDept.Eyeshot.Entities.Line lineEntity)
-                    LengthStatusLabel.Text = lineEntity.Length().ToString();
+                var context = DataContext as EyeshotTabViewModel;
+                context.SelectedEntityRadiusInformationText = string.Empty;
+                context.SelectedEntityLengthInformationText = string.Empty;
 
+                if (e.Entity is devDept.Eyeshot.Entities.Line lineEntity)
+                    context.SelectedEntityLengthInformationText = lineEntity.Length().ToString("F");
+                    
                 if (e.Entity is Arc arcEntity)
-                    LengthStatusLabel.Text = arcEntity.Length().ToString();
+                {
+                    context.SelectedEntityLengthInformationText = arcEntity.Length().ToString("F");
+                    context.SelectedEntityRadiusInformationText = arcEntity.Radius.ToString("F");
+                }
+                    
 
                 if (e.Entity is Circle circleEntity)
-                    LengthStatusLabel.Text = circleEntity.Length().ToString();
+                {
+                    context.SelectedEntityLengthInformationText = circleEntity.Length().ToString("F");
+                    context.SelectedEntityRadiusInformationText = circleEntity.Radius.ToString("F");
+                }
             }
         }
 
         public IEyeshotDesignView GetEyeshotView() => DraftView;
+
+        private void TriggerLayerView_Click(object sender, RoutedEventArgs e)
+        {
+            LayerView.Visible = !LayerView.Visible;
+            WindowsFormHost.Visibility = WindowsFormHost.Visibility == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed;
+
+            if(!LayerView.Visible)
+            {
+                Grid.SetColumn(DraftView, 0);
+                Grid.SetColumnSpan(DraftView, 2);
+            }
+            else
+            {
+                Grid.SetColumn(DraftView, 1);
+                Grid.SetColumnSpan(DraftView, 1);
+                Dispatcher.InvokeAsync(() => DraftView.DraftDesign.ZoomFit(margin: 25), System.Windows.Threading.DispatcherPriority.ContextIdle);
+            }
+        }
     }
 }
