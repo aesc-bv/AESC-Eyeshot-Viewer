@@ -13,6 +13,7 @@ using devDept.Graphics;
 using System.Windows.Forms;
 using System.Windows.Input;
 using AESC_Eyeshot_Viewer.Interfaces;
+using AESC_Eyeshot_Viewer.Events;
 
 namespace AESC_Eyeshot_Viewer.View
 {
@@ -24,9 +25,7 @@ namespace AESC_Eyeshot_Viewer.View
         public bool IsMeasureModeActive { get; set; } = false;
         public bool IsMeasureVisible { get; set; } = false;
         public event EyeshotDesignLoadCompleted EyeshotDesignLoadComplete;
-        public event EntitySelected EntityWasSelected;
         
-        public delegate void EntitySelected(object sender, EntityWasSelectedEventArgs e);
         public delegate void EyeshotDesignLoadCompleted(object sender, EventArgs eventArgs);
 
         public EyeshotDesignView()
@@ -98,8 +97,6 @@ namespace AESC_Eyeshot_Viewer.View
             Design.Invalidate();
         }
 
-        private void Viewport_MouseWheel(object _, MouseWheelEventArgs e) => Viewport.ZoomCamera(e.Delta);
-
         private void Design_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (!Design.IsBusy && e.LeftButton == MouseButtonState.Pressed)
@@ -151,7 +148,7 @@ namespace AESC_Eyeshot_Viewer.View
                         entity.TransformBy(transformation);
                     }
 
-                    EntityWasSelected?.Invoke(this, new EntityWasSelectedEventArgs { Entity = entity });
+                    DesignViewEvents.InvokeEntityWasSelectedEvent(this, new EntityWasSelectedEventArgs { Entity = entity });
 
                     if (Design.Entity1 == null)
                     {
@@ -190,30 +187,47 @@ namespace AESC_Eyeshot_Viewer.View
         }
 
         private void Design_Loaded(object sender, RoutedEventArgs e)
+            => LoadSTPFileIntoDesignView((DataContext as EyeshotDesignViewModel).LoadedFilePath);
+        
+
+        private void DraftDesign_DragEnter(object sender, System.Windows.DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+                e.Effects = System.Windows.DragDropEffects.Copy;
+            else
+                e.Effects = System.Windows.DragDropEffects.None;
+        }
+
+        private void DraftDesign_Drop(object sender, System.Windows.DragEventArgs e)
+        {
+            if (e.Data.GetData(System.Windows.DataFormats.FileDrop) is string[] files && files.Length == 1)
+                LoadSTPFileIntoDesignView(files.FirstOrDefault());
+            else
+                System.Windows.MessageBox.Show("You can only load 1 file at a time by dragging and dropping here. To load more, go to the tab: Load Files");
+        }
+
+        private void LoadSTPFileIntoDesignView(string filePath)
         {
             var context = DataContext as EyeshotDesignViewModel;
-            if (context.LoadedFileName != string.Empty && File.Exists(context.LoadedFilePath))
+            if (filePath != string.Empty && File.Exists(filePath))
             {
                 try
                 {
-                    var importResult = context.ImportFile(context.LoadedFilePath, Design);
+                    Dispatcher.InvokeAsync(() =>
+                    {
+                        var importResult = context.ImportFile(filePath, Design);
 
-                    if (importResult == string.Empty)
-                        System.Windows.MessageBox.Show("Could not open this file in the viewer, try again later", "Open failure", MessageBoxButton.OK, MessageBoxImage.Error);
+                        if (importResult == string.Empty)
+                            System.Windows.MessageBox.Show("Could not open this file in the viewer, try again later", "Open failure", MessageBoxButton.OK, MessageBoxImage.Error);
+                    });
                 }
                 catch (InvalidDataException exception)
                 {
                     System.Windows.MessageBox.Show(exception.Message, "File format error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
-                
         }
 
         public EyeshotDesignViewModel GetDataContext() => DataContext as EyeshotDesignViewModel;
-    }
-
-    public class EntityWasSelectedEventArgs
-    {
-        public Entity Entity { get; set; }
     }
 }

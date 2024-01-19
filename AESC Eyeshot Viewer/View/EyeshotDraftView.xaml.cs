@@ -29,9 +29,20 @@ namespace AESC_Eyeshot_Viewer.View
         public EyeshotDraftView()
         {
             InitializeComponent();
+            InitializeEyeshotControls();
 
             DraftDesign.ActionMode = actionType.SelectByPick;
             DraftDesign.AssemblySelectionMode = Workspace.assemblySelectionType.Leaf;
+        }
+
+        private void InitializeEyeshotControls()
+        {
+            var panMouseButton = new devDept.Eyeshot.Control.MouseButton
+            {
+                Button = mouseButtonsZPR.Right
+            };
+
+            Viewport.Pan.MouseButton = panMouseButton;
         }
 
         private void DraftDesign_MouseDown(object sender, MouseButtonEventArgs e)

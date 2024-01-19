@@ -3,9 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:AESC_Eyeshot_Viewer.View"
              xmlns:viewModel="clr-namespace:AESC_Eyeshot_Viewer.ViewModel"
-             xmlns:drafting="clr-namespace:devDept.CustomControls.Controls.Drafting;assembly=devDept.CustomControls.Wpf"
              xmlns:eyeshot="clr-namespace:devDept.Eyeshot;assembly=devDept.Eyeshot.v2023"
              xmlns:ddes="http://schemas.devdept.com/winfx/2008/xaml/control"
              mc:Ignorable="d" 
@@ -25,7 +23,7 @@
         Drop="DraftDesign_Drop"
         Loaded="DraftDesign_Loaded">
         <ddes:Design.Viewports>
-            <ddes:Viewport InitialView="Top" DisplayMode="Wireframe">
+            <ddes:Viewport Name="Viewport" InitialView="Top" DisplayMode="Wireframe">
                 <ddes:Viewport.Camera>
                     <eyeshot:Camera ZoomFactor="1.5" ProjectionMode="Orthographic"/>
                 </ddes:Viewport.Camera>
@@ -42,11 +40,8 @@
                 <ddes:Viewport.ToolBars>
                     <ddes:ToolBar Position="HorizontalTopCenter">
                         <ddes:ToolBar.Buttons>
-                            <ddes:HomeToolBarButton/>
                             <ddes:MagnifyingGlassToolBarButton/>
                             <ddes:ZoomWindowToolBarButton/>
-                            <ddes:ZoomToolBarButton/>
-                            <ddes:PanToolBarButton/>
                             <ddes:ZoomFitToolBarButton/>
                         </ddes:ToolBar.Buttons>
                     </ddes:ToolBar>

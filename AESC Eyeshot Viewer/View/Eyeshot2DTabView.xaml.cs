@@ -32,7 +32,7 @@ namespace AESC_Eyeshot_Viewer.View
             LayerView.Workspace = DraftView.DraftDesign;
         }
 
-        private void DesignViewEvents_EntityWasSelected(object sender, Events.EntityWasSelectedEventArgs e)
+        private void DesignViewEvents_EntityWasSelected(object sender, EntityWasSelectedEventArgs e)
         {
             if (sender is EyeshotDraftView)
             {

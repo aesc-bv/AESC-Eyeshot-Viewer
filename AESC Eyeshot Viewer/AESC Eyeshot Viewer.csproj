@@ -86,7 +86,7 @@
     </Compile>
     <Compile Include="Models\DistancePoints.cs" />
     <Compile Include="Models\EyeshotFile.cs" />
-    <Compile Include="Models\FileLoadingWorkerArgument.cs" />
+    <Compile Include="Models\MeasurementHelper.cs" />
     <Compile Include="ViewModel\EyeshotDesignViewModel.cs" />
     <Compile Include="ViewModel\EyeshotTabViewModel.cs" />
     <Compile Include="ViewModel\MainTabHeaderViewModel.cs" />

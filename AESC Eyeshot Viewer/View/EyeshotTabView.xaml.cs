@@ -1,4 +1,5 @@
-﻿using AESC_Eyeshot_Viewer.Interfaces;
+﻿using AESC_Eyeshot_Viewer.Events;
+using AESC_Eyeshot_Viewer.Interfaces;
 using AESC_Eyeshot_Viewer.ViewModel;
 using devDept.Eyeshot.Entities;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace AESC_Eyeshot_Viewer.View
             TreeView.Workspace = DesignView.Design;
             TreeView.Initialize();
 
-            DesignView.EntityWasSelected += DesignView_EntityWasSelected;
+            DesignViewEvents.EntityWasSelected += DesignView_EntityWasSelected;
         }
 
         private void DesignView_EntityWasSelected(object sender, EntityWasSelectedEventArgs e)

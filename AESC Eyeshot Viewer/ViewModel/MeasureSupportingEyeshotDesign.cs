@@ -149,7 +149,7 @@ namespace AESC_Eyeshot_Viewer.ViewModel
 
                 var midPoint = WorldToScreen(new Line(PointA, PointB).MidPoint);
 
-                string text = $"{_roundedDistance} mm";
+                string text = $"{_roundedDistance} {MeasurementHelper.ToAbbreviation(CurrentBlock.Units)}";
                 var textSize = graphics.MeasureString(text, _font);
                 textSize.Width *= _scaleFactor;
                 textSize.Height *= _scaleFactor;

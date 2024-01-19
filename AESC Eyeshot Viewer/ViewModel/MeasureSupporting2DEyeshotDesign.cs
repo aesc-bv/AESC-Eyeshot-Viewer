@@ -140,7 +140,6 @@ namespace AESC_Eyeshot_Viewer.ViewModel
         {
             if (_pointA != null && _pointB != null)
             {
-                System.Diagnostics.Debug.WriteLine($"Drawing a line between: {_pointA.ToStringXml()} and: {_pointB.ToStringXml()}");
                 var lineColour = ActiveViewport.Background.GetContrastColor();
                 var textColour = ActiveViewport.Background.GetContrastColorInverted();
 
@@ -150,7 +149,7 @@ namespace AESC_Eyeshot_Viewer.ViewModel
 
                 var midPoint = WorldToScreen(new Line(PointA, PointB).MidPoint);
 
-                string text = $"{_roundedDistance} mm";
+                string text = $"{_roundedDistance} {MeasurementHelper.ToAbbreviation(CurrentBlock.Units)}";
                 var textSize = graphics.MeasureString(text, _font);
                 textSize.Width *= _scaleFactor;
                 textSize.Height *= _scaleFactor;
