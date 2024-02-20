@@ -14,6 +14,8 @@ namespace AESC_Eyeshot_Viewer.ViewModel
         private string _selectedEntityInformationText;
         private string _selectedEntityLengthInformationText;
         private string _selectedEntityRadiusInformationText;
+        private string _selectedEntityAText = string.Empty;
+        private string _selectedEntityBText = string.Empty;
         public string SelectedEntityInformationText
         {
             get => _selectedEntityInformationText;
@@ -40,6 +42,26 @@ namespace AESC_Eyeshot_Viewer.ViewModel
             set
             {
                 _selectedEntityRadiusInformationText = value == string.Empty ? "" : $"Radius: {value}";
+                NotifyPropertyChanged();
+            }
+        }
+
+        public string SelectedEntityAText
+        {
+            get => _selectedEntityAText;
+            set
+            {
+                _selectedEntityAText = value == string.Empty ? string.Empty : $"Entity A: {value}";
+                NotifyPropertyChanged();
+            }
+        }
+
+        public string SelectedEntityBText
+        {
+            get => _selectedEntityBText;
+            set
+            {
+                _selectedEntityBText = value == string.Empty ? string.Empty : $"Entity B: {value}";
                 NotifyPropertyChanged();
             }
         }

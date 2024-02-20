@@ -52,6 +52,30 @@
                     FontStyle="Italic" 
                     FontSize="14" />
             </StatusBarItem>
+
+            <StatusBarItem Width="300" Height="30" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0">
+                <TextBlock 
+                    Name="SelectedEntityA" 
+                    Width="300" 
+                    Height="30" 
+                    Text="{Binding SelectedEntityAText}" 
+                    HorizontalAlignment="Left" 
+                    VerticalAlignment="Top" 
+                    FontStyle="Italic" 
+                    FontSize="14" />
+            </StatusBarItem>
+
+            <StatusBarItem Width="300" Height="30" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0">
+                <TextBlock 
+                    Name="SelectedEntityB" 
+                    Width="300" 
+                    Height="30" 
+                    Text="{Binding SelectedEntityBText}" 
+                    HorizontalAlignment="Left" 
+                    VerticalAlignment="Top" 
+                    FontStyle="Italic" 
+                    FontSize="14" />
+            </StatusBarItem>
         </StatusBar>
     </Grid>
 </UserControl>

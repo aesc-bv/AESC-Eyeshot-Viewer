@@ -51,7 +51,6 @@ namespace AESC_Eyeshot_Viewer.View
             {
                 var location = RenderContextUtility.ConvertPoint(DraftDesign.GetMousePosition(e));
                 var selectedItem = DraftDesign.GetItemUnderMouseCursor(location);
-                DraftDesign.PointA = DraftDesign.ScreenToWorld(location);
 
                 if (selectedItem != null && selectedItem.Item is Entity entity)
                 {
@@ -66,7 +65,7 @@ namespace AESC_Eyeshot_Viewer.View
                     }
 
                     DesignViewEvents
-                        .InvokeEntityWasSelectedEvent(this, new Events.EntityWasSelectedEventArgs
+                        .InvokeEntityWasSelectedEvent(this, new EntityWasSelectedEventArgs
                         {
                             Entity = entity,
                         });
@@ -92,24 +91,42 @@ namespace AESC_Eyeshot_Viewer.View
                             entity.LineWeight = 5.0f;
                         }
 
+                        DesignViewEvents
+                        .InvokeEntityWasSelectedEvent(this, new EntityWasSelectedEventArgs
+                        {
+                            Entity = entity,
+                            IsMeasuring = true,
+                        });
+
                         if (DraftDesign.Entity1 == null)
                         {
                             DraftDesign.ResetPoints();
+                            DraftDesign.ResetSelection();
                             DraftDesign.Entity1 = entity;
                         }
                         else
                         {
                             DraftDesign.Entity2 = entity;
+
+                            System.Diagnostics.Debug.WriteLine("=============POINTS AND ENTITIES BEFORE MIN DIST CALC===========");
+                            System.Diagnostics.Debug.WriteLine(DraftDesign.Entity1);
+                            System.Diagnostics.Debug.WriteLine(DraftDesign.Entity2);
+
+                            System.Diagnostics.Debug.WriteLine(DraftDesign.PointA);
+                            System.Diagnostics.Debug.WriteLine(DraftDesign.PointB);
                             var minimumDistance = new MinimumDistance(DraftDesign.Entity1, DraftDesign.Entity2);
                             DraftDesign.ActionMode = actionType.None;
                             DraftDesign.StartWork(minimumDistance);
+
+                            DraftDesign.Entity1 = null;
+                            DraftDesign.Entity2 = null;
                         }
                     }
                 }
                     
                 else if (selectedItem is null)
                     DesignViewEvents
-                        .InvokeEntityWasSelectedEvent(this, new Events.EntityWasSelectedEventArgs());
+                        .InvokeEntityWasSelectedEvent(this, new EntityWasSelectedEventArgs());
             }
         }
 
@@ -163,17 +180,19 @@ namespace AESC_Eyeshot_Viewer.View
                 DraftDesign.UpdateBoundingBox();
             else if (e.WorkUnit is MinimumDistance minimumDistance)
             {
+                DraftDesign.InvalidateMeasure();
+                DraftDesign.ResetPoints();
                 DraftDesign.PointA = minimumDistance.PtA;
                 DraftDesign.PointB = minimumDistance.PtB;
                 DraftDesign.Distance = minimumDistance.Distance;
 
-                DraftDesign.ResetSelection();
-                DraftDesign.Entities.ClearSelection();
+                System.Diagnostics.Debug.WriteLine("=============POINTS AND ENTITIES BEFORE MIN DIST CALC===========");
+                System.Diagnostics.Debug.WriteLine(DraftDesign.PointA.ToString());
+                System.Diagnostics.Debug.WriteLine(DraftDesign.PointB.ToString());
 
                 DraftDesign.ActionMode = actionType.SelectVisibleByPickDynamic;
 
                 IsMeasureVisible = true;
-                return;
             }
         }
 

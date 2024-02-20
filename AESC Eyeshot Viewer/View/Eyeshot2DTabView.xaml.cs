@@ -37,9 +37,13 @@ namespace AESC_Eyeshot_Viewer.View
             if (sender is EyeshotDraftView)
             {
                 var context = DataContext as EyeshotTabViewModel;
-                context.SelectedEntityRadiusInformationText = string.Empty;
-                context.SelectedEntityLengthInformationText = string.Empty;
 
+                if (!e.IsMeasuring)
+                {
+                    context.SelectedEntityRadiusInformationText = string.Empty;
+                    context.SelectedEntityLengthInformationText = string.Empty;
+                }
+                
                 if (e.Entity is devDept.Eyeshot.Entities.Line lineEntity)
                     context.SelectedEntityLengthInformationText = lineEntity.Length().ToString("F");
                     
@@ -55,6 +59,11 @@ namespace AESC_Eyeshot_Viewer.View
                     context.SelectedEntityLengthInformationText = circleEntity.Length().ToString("F");
                     context.SelectedEntityRadiusInformationText = circleEntity.Radius.ToString("F");
                 }
+
+                if (e.IsMeasuring && context.SelectedEntityAText == string.Empty)
+                    context.SelectedEntityAText = e.Entity.ToString();
+                else if (e.IsMeasuring && context.SelectedEntityAText != string.Empty)
+                    context.SelectedEntityBText = e.Entity.ToString();
             }
         }
 
