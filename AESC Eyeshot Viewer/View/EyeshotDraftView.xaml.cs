@@ -54,6 +54,8 @@ namespace AESC_Eyeshot_Viewer.View
 
                 if (selectedItem != null && selectedItem.Item is Entity entity)
                 {
+                    entity = entity.Clone() as Entity;
+
                     if (selectedItem.HasParents())
                     {
                         var transformation = new Identity() as Transformation;
