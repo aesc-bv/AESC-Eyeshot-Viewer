@@ -73,6 +73,8 @@ namespace AESC_Eyeshot_Viewer
                 loadingWindowThread.SetApartmentState(ApartmentState.STA);
                 loadingWindowThread.Start();
 
+                var numberOfExistingTabs = MainTabControl.Items.Count;
+
                 foreach (var filePath in files.Where(path => context.IsExtensionAcceptable(Path.GetExtension(path))))
                 {
                     var loadedFile = new EyeshotFile { Name = Path.GetFileNameWithoutExtension(filePath), Path = filePath };
@@ -102,7 +104,11 @@ namespace AESC_Eyeshot_Viewer
                     };
 
                     MainTabControl.Items.Add(newTab);
-                    MainTabControl.SelectedIndex = 1;
+
+                    if (numberOfExistingTabs < 2)
+                        MainTabControl.SelectedIndex = 1;
+                    else
+                        MainTabControl.SelectedIndex = MainTabControl.Items.Count - 1;
                 }                
             }
         }
