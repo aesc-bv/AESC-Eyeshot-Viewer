@@ -1,4 +1,7 @@
-﻿using AESC_Eyeshot_Viewer.ViewModel;
+﻿using AESC_Eyeshot_Viewer.Events;
+using AESC_Eyeshot_Viewer.Interfaces;
+using AESC_Eyeshot_Viewer.Models;
+using AESC_Eyeshot_Viewer.ViewModel;
 using devDept.Eyeshot.Entities;
 using System.Linq;
 using System.Windows.Controls;
@@ -9,7 +12,7 @@ namespace AESC_Eyeshot_Viewer.View
     /// <summary>
     /// Interaction logic for EyeshotTabView.xaml
     /// </summary>
-    public partial class EyeshotTabView : UserControl
+    public partial class EyeshotTabView : UserControl, IEyeshotTabView
     {
         public EyeshotTabView()
         {
@@ -18,28 +21,32 @@ namespace AESC_Eyeshot_Viewer.View
             TreeView.Workspace = DesignView.Design;
             TreeView.Initialize();
 
-            DesignView.EntityWasSelected += DesignView_EntityWasSelected;
+            DesignViewEvents.EntityWasSelected += DesignView_EntityWasSelected;
         }
 
         private void DesignView_EntityWasSelected(object sender, EntityWasSelectedEventArgs e)
         {
             var context = DataContext as EyeshotTabViewModel;
-            context.ClearInformationString();
+            context.SelectedEntityLengthInformationText = string.Empty;
+            context.SelectedEntityRadiusInformationText = string.Empty;
+
             if (e.Entity is Curve curve && curve.IsLinear(0.5, out var line))
-                context.SetLengthInformationString(line.Length);
+                context.SelectedEntityLengthInformationText = line.Length.ToString("F") + MeasurementHelper.ToAbbreviation(e.Unit);
             else if (e.Entity is Curve curvedEntity)
             {
                 if (curvedEntity.ConvertToArcsAndLines().FirstOrDefault(arcOrLine => arcOrLine is Arc) is Arc firstArc)
                 {
-                    context.SetLengthInformationString(curvedEntity.Length());
-                    context.SetRadiusInformationString(firstArc.Radius);
+                    context.SelectedEntityLengthInformationText = firstArc.Length().ToString("F") + MeasurementHelper.ToAbbreviation(e.Unit);
+                    context.SelectedEntityLengthInformationText = firstArc.Radius.ToString("F") + MeasurementHelper.ToAbbreviation(e.Unit);
                 }
                 else
-                    context.SetLengthInformationString(curvedEntity.Length());
+                    context.SelectedEntityLengthInformationText = curvedEntity.Length().ToString("F") + MeasurementHelper.ToAbbreviation(e.Unit);
             }
-            else if (e.Entity is devDept.Eyeshot.Entities.Line lineEntity && lineEntity.IsLinear(0.5, out var lineEntityLine))
-                context.SetLengthInformationString(lineEntityLine.Length);
+            else if (e.Entity is Line lineEntity && lineEntity.IsLinear(0.5, out var lineEntityLine))
+                context.SelectedEntityLengthInformationText = lineEntityLine.Length.ToString("F") + MeasurementHelper.ToAbbreviation(e.Unit);
         }
+
+        public IEyeshotDesignView GetEyeshotView() => DesignView;
 
         private void UserControl_PreviewKeyDown(object sender, KeyEventArgs e)
         {

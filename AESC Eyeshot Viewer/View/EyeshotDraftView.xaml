@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="AESC_Eyeshot_Viewer.View.EyeshotDraftView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewModel="clr-namespace:AESC_Eyeshot_Viewer.ViewModel"
+             xmlns:eyeshot="clr-namespace:devDept.Eyeshot;assembly=devDept.Eyeshot.v2023"
+             xmlns:ddes="http://schemas.devdept.com/winfx/2008/xaml/control"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewModel:EyeshotDesignViewModel />
+    </UserControl.DataContext>
+    
+    <viewModel:MeasureSupporting2DEyeshotDesign 
+        DockPanel.Dock="Top" 
+        x:Name="DraftDesign" 
+        MouseDown="DraftDesign_MouseDown"
+        KeyDown="DraftDesign_KeyDown"
+        WorkCompleted="DraftDesign_WorkCompleted" 
+        AllowDrop="True"
+        DragEnter="DraftDesign_DragEnter" 
+        Drop="DraftDesign_Drop"
+        Loaded="DraftDesign_Loaded">
+        <ddes:Design.Viewports>
+            <ddes:Viewport Name="Viewport" InitialView="Top" DisplayMode="Wireframe">
+                <ddes:Viewport.Camera>
+                    <eyeshot:Camera ZoomFactor="1.5" ProjectionMode="Orthographic"/>
+                </ddes:Viewport.Camera>
+                <ddes:Viewport.OriginSymbols>
+                    <ddes:OriginSymbol Lighting="False"/>
+                </ddes:Viewport.OriginSymbols>
+                <ddes:Viewport.CoordinateSystemIcon>
+                    <ddes:CoordinateSystemIcon Lighting="False"/>
+                </ddes:Viewport.CoordinateSystemIcon>
+
+                <ddes:Viewport.Background>
+                    <ddes:BackgroundSettings StyleMode="Solid"  TopColor="Black"/>
+                </ddes:Viewport.Background>
+                <ddes:Viewport.ToolBars>
+                    <ddes:ToolBar Position="HorizontalTopCenter">
+                        <ddes:ToolBar.Buttons>
+                            <ddes:MagnifyingGlassToolBarButton/>
+                            <ddes:ZoomWindowToolBarButton/>
+                            <ddes:ZoomFitToolBarButton/>
+                        </ddes:ToolBar.Buttons>
+                    </ddes:ToolBar>
+                </ddes:Viewport.ToolBars>
+            </ddes:Viewport>
+        </ddes:Design.Viewports>
+    </viewModel:MeasureSupporting2DEyeshotDesign>
+</UserControl>

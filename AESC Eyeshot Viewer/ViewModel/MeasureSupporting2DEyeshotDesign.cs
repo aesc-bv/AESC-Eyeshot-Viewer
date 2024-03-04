@@ -1,7 +1,6 @@
 ﻿using AESC_Eyeshot_Viewer.Models;
-using devDept.Eyeshot;
-using devDept.Eyeshot.Control;
 using devDept.Eyeshot.Entities;
+using devDept.Eyeshot;
 using devDept.Geometry;
 using System;
 using System.Collections.Generic;
@@ -9,10 +8,11 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using devDept.CustomControls.Controls.Drafting;
 
 namespace AESC_Eyeshot_Viewer.ViewModel
 {
-    public class MeasureSupportingEyeshotDesign : Design
+    internal class MeasureSupporting2DEyeshotDesign : Drafting2D
     {
         private const float _scaleFactor = 1.1f;
         private const double ZoomOnPointFactor = 1.5;
@@ -73,7 +73,7 @@ namespace AESC_Eyeshot_Viewer.ViewModel
 
         private readonly Graphics graphics;
 
-        public MeasureSupportingEyeshotDesign() : base()
+        public MeasureSupporting2DEyeshotDesign() : base()
         {
             Selection.LineWeightScaleFactor = 4;
             _font = new Font("FontFamily", 12.0f, System.Drawing.FontStyle.Bold);

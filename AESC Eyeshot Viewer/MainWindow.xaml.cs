@@ -24,6 +24,7 @@ using System.ComponentModel;
 using System.Runtime.Remoting.Contexts;
 using System.CodeDom.Compiler;
 using System.Threading;
+using AESC_Eyeshot_Viewer.Interfaces;
 
 namespace AESC_Eyeshot_Viewer
 {
@@ -77,9 +78,16 @@ namespace AESC_Eyeshot_Viewer
                     var loadedFile = new EyeshotFile { Name = Path.GetFileNameWithoutExtension(filePath), Path = filePath };
                     context.Files.Add(loadedFile);
 
-                    var newTabView = new EyeshotTabView();
-                    newTabView.DesignView.EyeshotDesignLoadComplete += DesignView_EyeshotDesignLoadComplete;
-                    var newTabContext = (newTabView.DesignView.DataContext as EyeshotDesignViewModel);
+                    var fileType = context.GetFileTypeOf(filePath);
+
+                    IEyeshotTabView newTabView;
+                    if (fileType == FileType.File2D)
+                        newTabView = new Eyeshot2DTabView();
+                    else
+                        newTabView = new EyeshotTabView();
+
+                    newTabView.GetEyeshotView().EyeshotDesignLoadComplete += DesignView_EyeshotDesignLoadComplete;
+                    var newTabContext = newTabView.GetEyeshotView().GetDataContext();
                     newTabContext.LoadedFilePath = loadedFile.Path;
                     newTabContext.LoadedFileName = loadedFile.Name;
 
@@ -94,6 +102,7 @@ namespace AESC_Eyeshot_Viewer
                     };
 
                     MainTabControl.Items.Add(newTab);
+                    MainTabControl.SelectedIndex = 1;
                 }                
             }
         }

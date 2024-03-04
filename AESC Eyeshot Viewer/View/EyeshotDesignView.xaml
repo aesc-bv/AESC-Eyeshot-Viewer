@@ -24,7 +24,7 @@
         Height="Auto"
         Margin="50,15,50,0">
         <ddes:Design.Viewports>
-            <ddes:Viewport DisplayMode="Rendered" Name="Viewport" MouseWheel="Viewport_MouseWheel">
+            <ddes:Viewport DisplayMode="Rendered" Name="Viewport">
                 <ddes:Viewport.Background>
                     <ddes:BackgroundSettings BottomColor="#FFE7E7E7" StyleMode="LinearGradient" TopColor="#FFE7E7E7"/>
                 </ddes:Viewport.Background>
