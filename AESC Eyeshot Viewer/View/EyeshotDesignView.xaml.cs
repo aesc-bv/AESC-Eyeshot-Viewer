@@ -22,8 +22,6 @@ namespace AESC_Eyeshot_Viewer.View
     /// </summary>
     public partial class EyeshotDesignView : System.Windows.Controls.UserControl, IEyeshotDesignView
     {
-        public bool IsMeasureModeActive { get; set; } = false;
-        public bool IsMeasureVisible { get; set; } = false;
         public event EyeshotDesignLoadCompleted EyeshotDesignLoadComplete;
         
         public delegate void EyeshotDesignLoadCompleted(object sender, EventArgs eventArgs);
@@ -58,7 +56,7 @@ namespace AESC_Eyeshot_Viewer.View
         {
             if (Design.IsBusy) return;
 
-            var context = DataContext as EyeshotDesignViewModel;
+            var context = GetDataContext();
 
             if (e.WorkUnit is ReadFileAsync workUnit)
             {
@@ -82,13 +80,12 @@ namespace AESC_Eyeshot_Viewer.View
                 Design.PointB = minimumDistance.PtB;
                 Design.Distance = minimumDistance.Distance;
 
-                Design.ZoomToPoints();
                 Design.ResetSelection();
                 Design.Entities.ClearSelection();
 
                 Design.ActionMode = actionType.SelectVisibleByPickDynamic;
 
-                IsMeasureVisible = true;
+                GetDataContext().IsMeasureVisible = true;
                 return;
             }
 
@@ -115,6 +112,8 @@ namespace AESC_Eyeshot_Viewer.View
                         return;
                     }
 
+                    brep = brep.Clone() as Brep;
+
                     brep.Rebuild(0, true);
 
                     Entity entity;
@@ -126,17 +125,19 @@ namespace AESC_Eyeshot_Viewer.View
                     else if (selectedItem is SelectedEdge)
                     {
                         var selEdge = selectedItem as SelectedEdge;
-                        entity = brep.Edges[selEdge.Index].Curve.GetNurbsForm();
+                        entity = brep.Edges[selEdge.Index].Curve.GetNurbsForm().Clone() as Curve;
                         entity.LineWeightMethod = colorMethodType.byEntity;
                         entity.LineWeight = 5.0f;
                     }
                     else if (selectedItem is SelectedFace)
                     {
                         var selFace = selectedItem as SelectedFace;
-                        entity = brep.Faces[selFace.Index].ConvertToSurface()[0];
+                        entity = brep.Faces[selFace.Index].ConvertToSurface()[0].Clone() as Surface;
                     }
                     else
                         entity = brep;
+
+                    entity = entity.Clone() as Entity;
 
                     if (selectedItem.HasParents())
                     {
@@ -148,14 +149,18 @@ namespace AESC_Eyeshot_Viewer.View
                         entity.TransformBy(transformation);
                     }
 
-                    DesignViewEvents.InvokeEntityWasSelectedEvent(this, new EntityWasSelectedEventArgs { Entity = entity });
+                    DesignViewEvents.InvokeEntityWasSelectedEvent(this, new EntityWasSelectedEventArgs { 
+                        Entity = entity, 
+                        Unit = Design.CurrentBlock.Units,
+                        IsMeasuring = GetDataContext().IsMeasureModeActive,
+                    });
 
                     if (Design.Entity1 == null)
                     {
                         Design.ResetPoints();
                         Design.Entity1 = entity;
                     }
-                    else if (IsMeasureModeActive)
+                    else if (GetDataContext().IsMeasureModeActive)
                     {
                         Design.Entity2 = entity;
                         var minimumDistance = new MinimumDistance(Design.Entity1, Design.Entity2);
@@ -175,9 +180,10 @@ namespace AESC_Eyeshot_Viewer.View
         {
             if (e.Key == Key.M)
             {
-                IsMeasureModeActive = !IsMeasureModeActive;
+                var context = GetDataContext();
+                context.IsMeasureModeActive = !context.IsMeasureModeActive;
 
-                if (IsMeasureVisible && !IsMeasureModeActive)
+                if (context.IsMeasureVisible && !context.IsMeasureModeActive)
                 {
                     Design.ResetPoints();
                     Design.ResetSelection();
@@ -187,7 +193,7 @@ namespace AESC_Eyeshot_Viewer.View
         }
 
         private void Design_Loaded(object sender, RoutedEventArgs e)
-            => LoadSTPFileIntoDesignView((DataContext as EyeshotDesignViewModel).LoadedFilePath);
+            => LoadSTPFileIntoDesignView(GetDataContext().LoadedFilePath);
         
 
         private void DraftDesign_DragEnter(object sender, System.Windows.DragEventArgs e)
@@ -208,14 +214,13 @@ namespace AESC_Eyeshot_Viewer.View
 
         private void LoadSTPFileIntoDesignView(string filePath)
         {
-            var context = DataContext as EyeshotDesignViewModel;
             if (filePath != string.Empty && File.Exists(filePath))
             {
                 try
                 {
                     Dispatcher.InvokeAsync(() =>
                     {
-                        var importResult = context.ImportFile(filePath, Design);
+                        var importResult = GetDataContext().ImportFile(filePath, Design);
 
                         if (importResult == string.Empty)
                             System.Windows.MessageBox.Show("Could not open this file in the viewer, try again later", "Open failure", MessageBoxButton.OK, MessageBoxImage.Error);

@@ -1,21 +1,10 @@
 ﻿using AESC_Eyeshot_Viewer.Interfaces;
 using AESC_Eyeshot_Viewer.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using AESC_Eyeshot_Viewer.Events;
 using devDept.Eyeshot.Entities;
+using AESC_Eyeshot_Viewer.Models;
 
 namespace AESC_Eyeshot_Viewer.View
 {
@@ -37,33 +26,24 @@ namespace AESC_Eyeshot_Viewer.View
             if (sender is EyeshotDraftView)
             {
                 var context = DataContext as EyeshotTabViewModel;
-
-                if (!e.IsMeasuring)
-                {
-                    context.SelectedEntityRadiusInformationText = string.Empty;
-                    context.SelectedEntityLengthInformationText = string.Empty;
-                }
+                context.SelectedEntityLengthInformationText = string.Empty;
+                context.SelectedEntityRadiusInformationText = string.Empty;
                 
-                if (e.Entity is devDept.Eyeshot.Entities.Line lineEntity)
-                    context.SelectedEntityLengthInformationText = lineEntity.Length().ToString("F");
+                if (e.Entity is Line lineEntity)
+                    context.SelectedEntityLengthInformationText = lineEntity.Length().ToString("F") + MeasurementHelper.ToAbbreviation(e.Unit);
                     
                 if (e.Entity is Arc arcEntity)
                 {
-                    context.SelectedEntityLengthInformationText = arcEntity.Length().ToString("F");
-                    context.SelectedEntityRadiusInformationText = arcEntity.Radius.ToString("F");
+                    context.SelectedEntityLengthInformationText = arcEntity.Length().ToString("F") + MeasurementHelper.ToAbbreviation(e.Unit);
+                    context.SelectedEntityRadiusInformationText = arcEntity.Radius.ToString("F") + MeasurementHelper.ToAbbreviation(e.Unit);
                 }
                     
 
                 if (e.Entity is Circle circleEntity)
                 {
-                    context.SelectedEntityLengthInformationText = circleEntity.Length().ToString("F");
-                    context.SelectedEntityRadiusInformationText = circleEntity.Radius.ToString("F");
+                    context.SelectedEntityLengthInformationText = circleEntity.Length().ToString("F") + MeasurementHelper.ToAbbreviation(e.Unit);
+                    context.SelectedEntityRadiusInformationText = circleEntity.Radius.ToString("F") + MeasurementHelper.ToAbbreviation(e.Unit);
                 }
-
-                if (e.IsMeasuring && context.SelectedEntityAText == string.Empty)
-                    context.SelectedEntityAText = e.Entity.ToString();
-                else if (e.IsMeasuring && context.SelectedEntityAText != string.Empty)
-                    context.SelectedEntityBText = e.Entity.ToString();
             }
         }
 

@@ -25,9 +25,18 @@
             </Grid.RowDefinitions>
             <local:EyeshotDesignView Grid.Row="0" x:Name="DesignView" />
             <TextBlock 
-                Name="SelectionDataTextBlock"
+                Name="SelectedEntityLengthInfoTextBlock"
                 Grid.Row="1" 
-                Text="{Binding SelectedEntityInformationText}" 
+                Text="{Binding SelectedEntityLengthInformationText}" 
+                Margin="50, 0" 
+                VerticalAlignment="Center" 
+                FontStyle="Italic"
+                TextWrapping="Wrap"/>
+            <TextBlock 
+                Name="SelectedEntityRadiusInfoTextBlock"
+                Grid.Row="1" 
+                Grid.Column="1"
+                Text="{Binding SelectedEntityRadiusInformationText}" 
                 Margin="50, 0" 
                 VerticalAlignment="Center" 
                 FontStyle="Italic"

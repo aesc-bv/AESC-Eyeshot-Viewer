@@ -8,22 +8,35 @@ using System.Windows;
 using System.Windows.Threading;
 using System.Threading;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace AESC_Eyeshot_Viewer.ViewModel
 {
-    public class EyeshotDesignViewModel
+    public class EyeshotDesignViewModel : INotifyPropertyChanged
     {
-        private string[] AcceptableExtensions { get; } = new string[] { ".stp", ".step" };
         private readonly string[] stepExtensions = new string[] { ".stp", ".step" };
         private readonly string[] dxfExtensions = new string[] { ".dxf" };
         private readonly string[] dwgExtensions = new string[] { ".dwg" };
+        private bool _isMeasureModeActive = false;
         public string LoadedFilePath { get; set; } = string.Empty;
         public string LoadedFileName { get; set; } = string.Empty;
         public List<SelectedItem> SelectedDesignItems { get; } = new List<SelectedItem>();
 
         public bool IsLoaded { get; set; } = false;
+        public bool IsMeasureModeActive
+        {
+            get => _isMeasureModeActive;
+            set
+            {
+                _isMeasureModeActive = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public bool IsMeasureVisible { get; set; } = false;
 
         public event IsLoadedEventHandler IsLoadedEvent;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public delegate void IsLoadedEventHandler(object sender, EventArgs isLoadedEventArgs);
 
@@ -32,7 +45,7 @@ namespace AESC_Eyeshot_Viewer.ViewModel
 
         public string ImportFile(string filePath, Design design)
         {
-            if (File.Exists(filePath))
+            if (File.Exists(LoadedFilePath))
             {
                 ReadFileAsync fileReader;
 
@@ -53,7 +66,10 @@ namespace AESC_Eyeshot_Viewer.ViewModel
                 {
                     var counter = 0;
                     while (design.IsBusy && counter < 50)
+                    {
                         Thread.Sleep(100);
+                        counter++;
+                    }
 
                     try
                     {
@@ -76,6 +92,7 @@ namespace AESC_Eyeshot_Viewer.ViewModel
 
         public void InvokeIsLoadedEvent() => IsLoadedEvent?.Invoke(this, new EventArgs());
 
-        public bool IsExtensionAcceptable(string extension) => AcceptableExtensions.Contains(extension.ToLower());
+        protected virtual void NotifyPropertyChanged([CallerMemberName] string propertyName = "") =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

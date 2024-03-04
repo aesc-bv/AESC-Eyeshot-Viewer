@@ -24,8 +24,6 @@ namespace AESC_Eyeshot_Viewer.View
     public partial class EyeshotDraftView : UserControl, IEyeshotDesignView
     {
         public event EyeshotDesignLoadCompleted EyeshotDesignLoadComplete;
-        public bool IsMeasureModeActive { get; set; } = false;
-        public bool IsMeasureVisible { get; set; } = false;
         public EyeshotDraftView()
         {
             InitializeComponent();
@@ -54,6 +52,7 @@ namespace AESC_Eyeshot_Viewer.View
 
                 if (selectedItem != null && selectedItem.Item is Entity entity)
                 {
+                    // Cloning is required to avoid mutating the underlying entity by the below transformations
                     entity = entity.Clone() as Entity;
 
                     if (selectedItem.HasParents())
@@ -70,9 +69,10 @@ namespace AESC_Eyeshot_Viewer.View
                         .InvokeEntityWasSelectedEvent(this, new EntityWasSelectedEventArgs
                         {
                             Entity = entity,
+                            Unit = DraftDesign.CurrentBlock.Units,
                         });
 
-                    if (IsMeasureModeActive)
+                    if (GetDataContext().IsMeasureModeActive)
                     {
                         if (entity is Line line)
                         {
@@ -98,6 +98,7 @@ namespace AESC_Eyeshot_Viewer.View
                         {
                             Entity = entity,
                             IsMeasuring = true,
+                            Unit = DraftDesign.CurrentBlock.Units,
                         });
 
                         if (DraftDesign.Entity1 == null)
@@ -109,19 +110,11 @@ namespace AESC_Eyeshot_Viewer.View
                         else
                         {
                             DraftDesign.Entity2 = entity;
-
-                            System.Diagnostics.Debug.WriteLine("=============POINTS AND ENTITIES BEFORE MIN DIST CALC===========");
-                            System.Diagnostics.Debug.WriteLine(DraftDesign.Entity1);
-                            System.Diagnostics.Debug.WriteLine(DraftDesign.Entity2);
-
-                            System.Diagnostics.Debug.WriteLine(DraftDesign.PointA);
-                            System.Diagnostics.Debug.WriteLine(DraftDesign.PointB);
                             var minimumDistance = new MinimumDistance(DraftDesign.Entity1, DraftDesign.Entity2);
                             DraftDesign.ActionMode = actionType.None;
                             DraftDesign.StartWork(minimumDistance);
 
-                            DraftDesign.Entity1 = null;
-                            DraftDesign.Entity2 = null;
+                            DraftDesign.ResetSelection();
                         }
                     }
                 }
@@ -136,7 +129,7 @@ namespace AESC_Eyeshot_Viewer.View
         {
             if (DraftDesign.IsBusy) return;
 
-            var context = DataContext as EyeshotDesignViewModel;
+            var context = GetDataContext();
 
             if (e.WorkUnit is ReadFileAsync workUnit)
             {
@@ -184,17 +177,14 @@ namespace AESC_Eyeshot_Viewer.View
             {
                 DraftDesign.InvalidateMeasure();
                 DraftDesign.ResetPoints();
+                DraftDesign.ResetSelection();
                 DraftDesign.PointA = minimumDistance.PtA;
                 DraftDesign.PointB = minimumDistance.PtB;
                 DraftDesign.Distance = minimumDistance.Distance;
 
-                System.Diagnostics.Debug.WriteLine("=============POINTS AND ENTITIES BEFORE MIN DIST CALC===========");
-                System.Diagnostics.Debug.WriteLine(DraftDesign.PointA.ToString());
-                System.Diagnostics.Debug.WriteLine(DraftDesign.PointB.ToString());
-
                 DraftDesign.ActionMode = actionType.SelectVisibleByPickDynamic;
 
-                IsMeasureVisible = true;
+                context.IsMeasureVisible = true;
             }
         }
 
@@ -215,11 +205,11 @@ namespace AESC_Eyeshot_Viewer.View
         }
 
         private void DraftDesign_Loaded(object sender, RoutedEventArgs e)
-            => LoadDXFFileIntoDesignView((DataContext as EyeshotDesignViewModel).LoadedFilePath);
+            => LoadDXFFileIntoDesignView(GetDataContext().LoadedFilePath);
 
         private void LoadDXFFileIntoDesignView(string filePath)
         {
-            var context = DataContext as EyeshotDesignViewModel;
+            var context = GetDataContext();
             if (filePath != string.Empty && File.Exists(filePath))
             {
                 try
@@ -243,11 +233,12 @@ namespace AESC_Eyeshot_Viewer.View
 
         private void DraftDesign_KeyDown(object sender, KeyEventArgs e)
         {
+            var context = GetDataContext();
             if (e.Key == Key.M)
             {
-                IsMeasureModeActive = !IsMeasureModeActive;
+                context.IsMeasureModeActive = !context.IsMeasureModeActive;
 
-                if (IsMeasureVisible && !IsMeasureModeActive)
+                if (context.IsMeasureVisible && !context.IsMeasureModeActive)
                 {
                     DraftDesign.ResetPoints();
                     DraftDesign.ResetSelection();
