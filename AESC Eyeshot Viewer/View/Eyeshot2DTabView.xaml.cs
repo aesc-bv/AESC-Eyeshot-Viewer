@@ -18,8 +18,11 @@ namespace AESC_Eyeshot_Viewer.View
             InitializeComponent();
 
             DesignViewEvents.EntityWasSelected += DesignViewEvents_EntityWasSelected;
+            DraftView.EyeshotDesignLoadComplete += DraftView_EyeshotDesignLoadComplete;
             LayerView.Workspace = DraftView.DraftDesign;
         }
+
+        private void DraftView_EyeshotDesignLoadComplete(object sender, System.EventArgs eventArgs) => LayerView.SyncLayers();
 
         private void DesignViewEvents_EntityWasSelected(object sender, EntityWasSelectedEventArgs e)
         {
