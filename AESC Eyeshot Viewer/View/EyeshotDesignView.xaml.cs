@@ -54,7 +54,10 @@ namespace AESC_Eyeshot_Viewer.View
 
         public void Design_WorkCompleted(object _, WorkCompletedEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine("Work Completed");
             if (Design.IsBusy) return;
+
+            System.Diagnostics.Debug.WriteLine("Design not busy");
 
             var context = GetDataContext();
 
@@ -71,6 +74,7 @@ namespace AESC_Eyeshot_Viewer.View
             }
             else if (e.WorkUnit is Regeneration)
             {
+                Design.Invalidate();
                 Design.UpdateBoundingBox();
                 EyeshotDesignLoadComplete?.Invoke(this, EventArgs.Empty);
             }

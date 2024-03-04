@@ -21,6 +21,8 @@
         KeyDown="Design_KeyDown"
         Loaded="Design_Loaded"
         AllowDrop="True" 
+        DragEnter="DraftDesign_DragEnter"
+        PreviewDrop="DraftDesign_Drop"
         Height="Auto"
         Margin="50,15,50,0">
         <ddes:Design.Viewports>
