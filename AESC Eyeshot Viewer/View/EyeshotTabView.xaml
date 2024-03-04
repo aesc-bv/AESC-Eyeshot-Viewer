@@ -11,7 +11,7 @@
     <UserControl.DataContext>
         <viewModel:EyeshotTabViewModel />
     </UserControl.DataContext>
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="109*"/>

@@ -39,8 +39,15 @@ namespace AESC_Eyeshot_Viewer.View
 
         private void Workspace_WorkCompleted(object sender, devDept.WorkCompletedEventArgs e)
         {
-            if (e.WorkUnit is Regeneration)
-                AssemblyTreeView.RefreshTree();
+            try
+            {
+                if (e.WorkUnit is Regeneration)
+                    AssemblyTreeView.RefreshTree();
+            } catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+            }
+            
         }
     }
 }
