@@ -54,10 +54,7 @@ namespace AESC_Eyeshot_Viewer.View
 
         public void Design_WorkCompleted(object _, WorkCompletedEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Work Completed");
             if (Design.IsBusy) return;
-
-            System.Diagnostics.Debug.WriteLine("Design not busy");
 
             var context = GetDataContext();
 
@@ -112,7 +109,7 @@ namespace AESC_Eyeshot_Viewer.View
                 {
                     if (!(selectedItem.Item is Brep brep))
                     {
-                        System.Windows.Forms.MessageBox.Show($"Measurement works only on Brep entities\r\nSelected item is of type {selectedItem.Item.GetType().Name}", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        System.Windows.Forms.MessageBox.Show($"{Properties.Resources.MeasurementSelectionRestrictionMessage} {selectedItem.Item.GetType().Name}", Properties.Resources.Info, MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;
                     }
 
@@ -213,7 +210,7 @@ namespace AESC_Eyeshot_Viewer.View
             if (e.Data.GetData(System.Windows.DataFormats.FileDrop) is string[] files && files.Length == 1)
                 LoadSTPFileIntoDesignView(files.FirstOrDefault());
             else
-                System.Windows.MessageBox.Show("You can only load 1 file at a time by dragging and dropping here. To load more, go to the tab: Load Files");
+                System.Windows.MessageBox.Show(Properties.Resources.MaxFileLoadLimitOnViewer);
         }
 
         private void LoadSTPFileIntoDesignView(string filePath)
@@ -227,12 +224,12 @@ namespace AESC_Eyeshot_Viewer.View
                         var importResult = GetDataContext().ImportFile(filePath, Design);
 
                         if (importResult == string.Empty)
-                            System.Windows.MessageBox.Show("Could not open this file in the viewer, try again later", "Open failure", MessageBoxButton.OK, MessageBoxImage.Error);
+                            System.Windows.MessageBox.Show(Properties.Resources.FailedToOpenFileInViewer, Properties.Resources.GeneralOpenFileFailure, MessageBoxButton.OK, MessageBoxImage.Error);
                     });
                 }
                 catch (InvalidDataException exception)
                 {
-                    System.Windows.MessageBox.Show(exception.Message, "File format error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    System.Windows.MessageBox.Show(exception.Message, Properties.Resources.GeneralFileFormatError, MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }

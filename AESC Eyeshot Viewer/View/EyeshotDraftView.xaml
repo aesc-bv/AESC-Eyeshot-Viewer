@@ -6,47 +6,88 @@
              xmlns:viewModel="clr-namespace:AESC_Eyeshot_Viewer.ViewModel"
              xmlns:eyeshot="clr-namespace:devDept.Eyeshot;assembly=devDept.Eyeshot.v2023"
              xmlns:ddes="http://schemas.devdept.com/winfx/2008/xaml/control"
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             xmlns:l="clr-namespace:AESC_Eyeshot_Viewer.Properties"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="800" d:DesignWidth="900">
     <UserControl.DataContext>
         <viewModel:EyeshotDesignViewModel />
     </UserControl.DataContext>
-    
-    <viewModel:MeasureSupporting2DEyeshotDesign 
-        DockPanel.Dock="Top" 
-        x:Name="DraftDesign" 
-        MouseDown="DraftDesign_MouseDown"
-        KeyDown="DraftDesign_KeyDown"
-        WorkCompleted="DraftDesign_WorkCompleted" 
-        AllowDrop="True"
-        DragEnter="DraftDesign_DragEnter" 
-        Drop="DraftDesign_Drop"
-        Loaded="DraftDesign_Loaded">
-        <ddes:Design.Viewports>
-            <ddes:Viewport Name="Viewport" InitialView="Top" DisplayMode="Wireframe">
-                <ddes:Viewport.Camera>
-                    <eyeshot:Camera ZoomFactor="1.5" ProjectionMode="Orthographic"/>
-                </ddes:Viewport.Camera>
-                <ddes:Viewport.OriginSymbols>
-                    <ddes:OriginSymbol Lighting="False"/>
-                </ddes:Viewport.OriginSymbols>
-                <ddes:Viewport.CoordinateSystemIcon>
-                    <ddes:CoordinateSystemIcon Lighting="False"/>
-                </ddes:Viewport.CoordinateSystemIcon>
 
-                <ddes:Viewport.Background>
-                    <ddes:BackgroundSettings StyleMode="Solid"  TopColor="Black"/>
-                </ddes:Viewport.Background>
-                <ddes:Viewport.ToolBars>
-                    <ddes:ToolBar Position="HorizontalTopCenter">
-                        <ddes:ToolBar.Buttons>
-                            <ddes:MagnifyingGlassToolBarButton/>
-                            <ddes:ZoomWindowToolBarButton/>
-                            <ddes:ZoomFitToolBarButton/>
-                        </ddes:ToolBar.Buttons>
-                    </ddes:ToolBar>
-                </ddes:Viewport.ToolBars>
-            </ddes:Viewport>
-        </ddes:Design.Viewports>
-    </viewModel:MeasureSupporting2DEyeshotDesign>
+    <Grid Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="4*" />
+            <RowDefinition Height="83*" />
+        </Grid.RowDefinitions>
+
+        <StatusBar Name="StatusBar" Grid.Row="0">
+            <StatusBarItem>
+                <Label Padding="5" Content="{x:Static l:Resources.ActiveModeLabel}" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Padding="5" Text="{Binding CurrentActiveFunction}" />
+            </StatusBarItem>
+            <StatusBarItem Visibility="{Binding ShouldShowGuide}" Margin="20, 0, 0, 0">
+                <Label Padding="5" Content="{x:Static l:Resources.GuideLabel}" />
+            </StatusBarItem>
+            <StatusBarItem Visibility="{Binding ShouldShowGuide}">
+                <TextBlock Padding="5" Text="{Binding UserGuide}"/>
+            </StatusBarItem>
+        </StatusBar>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Name="Overlay" Panel.ZIndex="1000" MaxHeight="100" VerticalAlignment="Top" Margin="10, 0" Height="40">
+            <Button 
+                Padding="5" 
+                Style="{DynamicResource OverlayButtonStyle}" 
+                Name="MeasurementButton" 
+                Height="40" 
+                Width="40" 
+                BorderThickness="0" 
+                Background="Transparent"
+                ToolTip="{x:Static l:Resources.MeasureButtonTooltip}"
+                Click="MeasurementButton_Click">
+                <svgc:SvgViewbox Source="/Resources/Images/ruler.svg" />
+            </Button>
+        </StackPanel>
+
+        <viewModel:MeasureSupporting2DEyeshotDesign 
+            Grid.Row="1"
+            DockPanel.Dock="Top" 
+            x:Name="DraftDesign" 
+            MouseDown="DraftDesign_MouseDown"
+            KeyDown="DraftDesign_KeyDown"
+            WorkCompleted="DraftDesign_WorkCompleted" 
+            AllowDrop="True"
+            DragEnter="DraftDesign_DragEnter" 
+            Drop="DraftDesign_Drop"
+            Loaded="DraftDesign_Loaded">
+            <ddes:Design.Viewports>
+                <ddes:Viewport Name="Viewport" InitialView="Top" DisplayMode="Wireframe">
+                    <ddes:Viewport.Camera>
+                        <eyeshot:Camera ZoomFactor="1.5" ProjectionMode="Orthographic"/>
+                    </ddes:Viewport.Camera>
+                    <ddes:Viewport.OriginSymbols>
+                        <ddes:OriginSymbol Lighting="False"/>
+                    </ddes:Viewport.OriginSymbols>
+                    <ddes:Viewport.CoordinateSystemIcon>
+                        <ddes:CoordinateSystemIcon Lighting="False"/>
+                    </ddes:Viewport.CoordinateSystemIcon>
+
+                    <ddes:Viewport.Background>
+                        <ddes:BackgroundSettings StyleMode="Solid"  TopColor="Black"/>
+                    </ddes:Viewport.Background>
+                    <ddes:Viewport.ToolBars>
+                        <ddes:ToolBar Position="HorizontalTopCenter">
+                            <ddes:ToolBar.Buttons>
+                                <ddes:ZoomWindowToolBarButton/>
+                                <ddes:ZoomFitToolBarButton/>
+                            </ddes:ToolBar.Buttons>
+                        </ddes:ToolBar>
+                    </ddes:Viewport.ToolBars>
+                </ddes:Viewport>
+            </ddes:Design.Viewports>
+        </viewModel:MeasureSupporting2DEyeshotDesign>
+    </Grid>
+
+
 </UserControl>

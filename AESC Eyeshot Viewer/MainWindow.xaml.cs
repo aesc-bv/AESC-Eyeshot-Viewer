@@ -55,10 +55,7 @@ namespace AESC_Eyeshot_Viewer
 
                 var loadingWindowThread = new Thread(() =>
                 {
-                    loadingWindow = new LoadingWindow
-                    {
-                        LoadingText = "Tabbladen aan het laden...",
-                    };
+                    loadingWindow = new LoadingWindow();
 
                     loadingWindow.Closed += (sender, args) =>
                     {

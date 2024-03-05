@@ -19,7 +19,6 @@ namespace AESC_Eyeshot_Viewer
     /// </summary>
     public partial class LoadingWindow : Window
     {
-        public string LoadingText { get; set; }
         public CloseLoadingWindow CloseLoadingWindow;
         public LoadingWindow()
         {

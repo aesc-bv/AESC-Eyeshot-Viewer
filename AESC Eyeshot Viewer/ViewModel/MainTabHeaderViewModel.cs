@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace AESC_Eyeshot_Viewer.ViewModel
 {
     internal class MainTabHeaderViewModel : INotifyPropertyChanged
     {
         public string Header 
-        { 
-            get { return _header; } 
+        {
+            get => _header;
             set {
                 _header = value;
                 NotifyPropertyChanged();
@@ -20,7 +16,7 @@ namespace AESC_Eyeshot_Viewer.ViewModel
         }
         public int Index
         {
-            get { return _index; }
+            get => _index;
             set
             {
                 _index = value;
