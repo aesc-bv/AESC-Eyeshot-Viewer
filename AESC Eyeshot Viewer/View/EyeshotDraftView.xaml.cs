@@ -174,8 +174,6 @@ namespace AESC_Eyeshot_Viewer.View
 
                 DraftDesign.Layers[0].LineWeight = 2;
                 DraftDesign.Layers[0].Color = DraftDesign.DrawingColor;
-                DraftDesign.Layers.TryAdd(new Layer("Dimensions", System.Drawing.Color.ForestGreen));
-                DraftDesign.Layers.TryAdd(new Layer("Reference geometry", System.Drawing.Color.Red));
 
 
                 if (!_skipZoomFit)
