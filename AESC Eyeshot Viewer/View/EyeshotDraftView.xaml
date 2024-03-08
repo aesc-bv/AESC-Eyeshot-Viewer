@@ -46,7 +46,7 @@
                 Background="Transparent"
                 ToolTip="{x:Static l:Resources.MeasureButtonTooltip}"
                 Click="MeasurementButton_Click">
-                <svgc:SvgViewbox Source="/Resources/Images/ruler.svg" />
+                <svgc:SvgViewbox Source="/Images/ruler.svg" />
             </Button>
         </StackPanel>
 
