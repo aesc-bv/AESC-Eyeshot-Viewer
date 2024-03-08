@@ -14,6 +14,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using static AESC_Eyeshot_Viewer.View.EyeshotDesignView;
 
 namespace AESC_Eyeshot_Viewer.View
@@ -106,15 +107,27 @@ namespace AESC_Eyeshot_Viewer.View
                             DraftDesign.ResetPoints();
                             DraftDesign.ResetSelection();
                             DraftDesign.Entity1 = entity;
+                            GetDataContext().UserGuide = Properties.Resources.GuideMeasureStepTwo;
                         }
                         else
                         {
-                            DraftDesign.Entity2 = entity;
-                            var minimumDistance = new MinimumDistance(DraftDesign.Entity1, DraftDesign.Entity2);
-                            DraftDesign.ActionMode = actionType.None;
-                            DraftDesign.StartWork(minimumDistance);
+                            try
+                            {
+                                DraftDesign.Entity2 = entity;
+                                var minimumDistance = new MinimumDistance(DraftDesign.Entity1, DraftDesign.Entity2);
+                                DraftDesign.ActionMode = actionType.None;
+                                DraftDesign.StartWork(minimumDistance);
 
-                            DraftDesign.ResetSelection();
+                                DraftDesign.ResetSelection();
+
+                                GetDataContext().UserGuide = Properties.Resources.GuideMeasureComplete;
+                            } catch 
+                            {
+                                DraftDesign.ResetPoints();
+                                DraftDesign.ResetSelection();
+                                GetDataContext().UserGuide = Properties.Resources.GuideMeasureUnsupportedSelection;
+                            }
+                           
                         }
                     }
                 }
@@ -201,7 +214,7 @@ namespace AESC_Eyeshot_Viewer.View
             if (e.Data.GetData(DataFormats.FileDrop) is string[] files && files.Length == 1)
                 LoadDXFFileIntoDesignView(files.FirstOrDefault());
             else
-                MessageBox.Show("You can only load 1 file at a time by dragging and dropping here. To load more, go to the tab: Load Files");
+                MessageBox.Show(Properties.Resources.MaxFileLoadLimitOnViewer);
         }
 
         private void DraftDesign_Loaded(object sender, RoutedEventArgs e)
@@ -219,12 +232,12 @@ namespace AESC_Eyeshot_Viewer.View
                         var importResult = context.ImportFile(filePath, DraftDesign);
 
                         if (importResult == string.Empty)
-                            MessageBox.Show("Could not open this file in the viewer, try again later", "Open failure", MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show(Properties.Resources.FailedToOpenFileInViewer, Properties.Resources.GeneralOpenFileFailure, MessageBoxButton.OK, MessageBoxImage.Error);
                     });
                 }
                 catch (InvalidDataException exception)
                 {
-                    MessageBox.Show(exception.Message, "File format error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(exception.Message, Properties.Resources.GeneralFileFormatError, MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -244,6 +257,27 @@ namespace AESC_Eyeshot_Viewer.View
                     DraftDesign.ResetSelection();
                 }
             }
+        }
+
+        private void MeasurementButton_Click(object sender, RoutedEventArgs e)
+        {
+            var context = GetDataContext();
+            context.IsMeasureModeActive = !context.IsMeasureModeActive;
+
+            if (context.IsMeasureModeActive)
+                MeasurementButton.Background = new SolidColorBrush() { Color = Colors.LightGray, Opacity = 0.8 };
+            else
+            {
+                if (context.IsMeasureVisible)
+                {
+                    DraftDesign.ResetPoints();
+                    DraftDesign.ResetSelection();
+                    DraftDesign.Invalidate();
+                }
+
+                MeasurementButton.Background = new SolidColorBrush() { Color = Colors.Transparent };
+            }
+                
         }
     }
 }

@@ -26,10 +26,7 @@ namespace AESC_Eyeshot_Viewer.ViewModel
 
         public Point3D PointA
         {
-            get
-            {
-                return _pointA;
-            }
+            get => _pointA;
 
             set
             {
@@ -40,10 +37,7 @@ namespace AESC_Eyeshot_Viewer.ViewModel
         private Point3D _pointB = null;
         public Point3D PointB
         {
-            get
-            {
-                return _pointB;
-            }
+            get => _pointB;
 
             set
             {
@@ -59,10 +53,7 @@ namespace AESC_Eyeshot_Viewer.ViewModel
 
         public double Distance
         {
-            get
-            {
-                return _distance;
-            }
+            get => _distance;
 
             set
             {

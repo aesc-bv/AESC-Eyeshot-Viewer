@@ -118,69 +118,69 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ActiveModeLabel" xml:space="preserve">
-    <value>Active mode:</value>
+    <value>Actieve modus:</value>
   </data>
   <data name="ActiveModeMeasuring" xml:space="preserve">
-    <value>measuring</value>
+    <value>meten</value>
   </data>
   <data name="ActiveModeSelecting" xml:space="preserve">
-    <value>selecting</value>
+    <value>selecteren</value>
   </data>
   <data name="DropToLoadFilesText" xml:space="preserve">
-    <value>Drop one or more STEP and/or DXF files in this area to open them</value>
+    <value>Sleep een of meer STEP en/of DXF bestanden in dit gebied om ze te openen</value>
   </data>
   <data name="FailedToOpenFileInViewer" xml:space="preserve">
-    <value>Could not open this file in the viewer, try again later</value>
+    <value>Kon bestand niet openen, probeer later nog eens</value>
   </data>
   <data name="GeneralFileFormatError" xml:space="preserve">
-    <value>File format error</value>
+    <value>Foutmelding: bestandsfomaat</value>
   </data>
   <data name="GeneralOpenFileFailure" xml:space="preserve">
-    <value>Open failure</value>
+    <value>Foutmelding: openen bestand</value>
   </data>
   <data name="GuideLabel" xml:space="preserve">
-    <value>To use:</value>
+    <value>Gebruiksaanwijzing</value>
   </data>
   <data name="GuideMeasureComplete" xml:space="preserve">
-    <value>Measure now displaying, click any other line to start measuring anew</value>
+    <value>Bemating nu zichtbaar, klik op een andere lijn om opnieuw te meten</value>
   </data>
   <data name="GuideMeasureStepOne" xml:space="preserve">
-    <value>Select a line to start measuring</value>
+    <value>Selecteer een lijn om te beginnen met meten</value>
   </data>
   <data name="GuideMeasureStepTwo" xml:space="preserve">
-    <value>Select another line to measure</value>
+    <value>Selecteer een andere lijn om te meten</value>
   </data>
   <data name="GuideMeasureUnsupportedSelection" xml:space="preserve">
-    <value>Unsupported selection, select first line to measure</value>
+    <value>Selectie niet ondersteund, selecteer de eerste lijn om te meten</value>
   </data>
   <data name="Info" xml:space="preserve">
     <value>Info</value>
   </data>
   <data name="LengthInformationLabel" xml:space="preserve">
-    <value>Length:</value>
+    <value>Lengte:</value>
   </data>
   <data name="LoadFilesTabHeader" xml:space="preserve">
-    <value>Load Files</value>
+    <value>Bestanden laden</value>
   </data>
   <data name="LoadingText" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Laden...</value>
   </data>
   <data name="MaxFileLoadLimitOnViewer" xml:space="preserve">
-    <value>You can only load 1 file at a time by dragging and dropping here. To load more, go to the tab: Load Files</value>
+    <value>U kunt slechts 1 bestand laden door het hierin te slepen. Om meerdere bestanden te laden gaat u naar het tabblad Bestanden laden</value>
   </data>
   <data name="MeasureButtonTooltip" xml:space="preserve">
-    <value>Toggle measuring mode</value>
+    <value>Meetmodus aan/uitzetten</value>
   </data>
   <data name="MeasurementSelectionRestrictionMessage" xml:space="preserve">
-    <value>Measurement works only on Brep entities\r\nSelected item is of type</value>
+    <value>Meten werkt alleen op Breps \n\r u selecteerde een </value>
   </data>
   <data name="RadiusInformationLabel" xml:space="preserve">
     <value>Radius:</value>
   </data>
   <data name="SelectionDefaultInfoText" xml:space="preserve">
-    <value>Click on any line, curve, or object to see information regarding your selection</value>
+    <value>Klik op een lijn, curve of object om er meer informatie over te zien</value>
   </data>
   <data name="ShowOrHideLayerViewText" xml:space="preserve">
-    <value>Show / Hide layers</value>
+    <value>Lagen tonen/verbergen</value>
   </data>
 </root>

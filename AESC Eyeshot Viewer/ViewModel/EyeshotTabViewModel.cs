@@ -5,7 +5,6 @@ namespace AESC_Eyeshot_Viewer.ViewModel
 {
     internal class EyeshotTabViewModel : INotifyPropertyChanged
     {
-        private const string _defaultInfoText = "Click on any line, curve, or object to see information regarding your selection";
         private string _selectedEntityLengthInformationText;
         private string _selectedEntityRadiusInformationText;
 
@@ -14,7 +13,7 @@ namespace AESC_Eyeshot_Viewer.ViewModel
             get => _selectedEntityLengthInformationText;
             set
             {
-                _selectedEntityLengthInformationText = value == string.Empty ? "" : $"Lengte: {value}";
+                _selectedEntityLengthInformationText = value == string.Empty ? "" : $"{Properties.Resources.LengthInformationLabel} {value}";
                 NotifyPropertyChanged();
             }
         }
@@ -24,20 +23,24 @@ namespace AESC_Eyeshot_Viewer.ViewModel
             get => _selectedEntityRadiusInformationText;
             set
             {
-                _selectedEntityRadiusInformationText = value == string.Empty ? "" : $"Radius: {value}";
+                _selectedEntityRadiusInformationText = value == string.Empty ? "" : $"{Properties.Resources.RadiusInformationLabel} {value}";
                 NotifyPropertyChanged();
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public EyeshotTabViewModel(string selectedEntityInformationText = _defaultInfoText)
+        public EyeshotTabViewModel(string selectedEntityInformationText)
         {
-            _selectedEntityLengthInformationText = selectedEntityInformationText;
+            _selectedEntityLengthInformationText = selectedEntityInformationText ?? Properties.Resources.SelectionDefaultInfoText;
             NotifyPropertyChanged(nameof(SelectedEntityLengthInformationText));
         }
 
-        public EyeshotTabViewModel() { }
+        public EyeshotTabViewModel() 
+        {
+            _selectedEntityLengthInformationText = Properties.Resources.SelectionDefaultInfoText;
+            NotifyPropertyChanged(nameof(SelectedEntityLengthInformationText));
+        }
 
         protected virtual void NotifyPropertyChanged([CallerMemberName] string propertyName = "") =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

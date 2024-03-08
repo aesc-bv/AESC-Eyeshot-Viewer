@@ -7,7 +7,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
 using System.Threading;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -19,9 +18,12 @@ namespace AESC_Eyeshot_Viewer.ViewModel
         private readonly string[] dxfExtensions = new string[] { ".dxf" };
         private readonly string[] dwgExtensions = new string[] { ".dwg" };
         private bool _isMeasureModeActive = false;
+        private Visibility _shouldShowGuide = Visibility.Collapsed;
+        private string _currentActiveAction = "selecting";
+        private string _userGuide = string.Empty;
+
         public string LoadedFilePath { get; set; } = string.Empty;
         public string LoadedFileName { get; set; } = string.Empty;
-        public List<SelectedItem> SelectedDesignItems { get; } = new List<SelectedItem>();
 
         public bool IsLoaded { get; set; } = false;
         public bool IsMeasureModeActive
@@ -31,9 +33,52 @@ namespace AESC_Eyeshot_Viewer.ViewModel
             {
                 _isMeasureModeActive = value;
                 NotifyPropertyChanged();
+
+                if (_isMeasureModeActive)
+                {
+                    ShouldShowGuide = Visibility.Visible;
+                    CurrentActiveFunction = Properties.Resources.ActiveModeMeasuring;
+                    UserGuide = Properties.Resources.GuideMeasureStepOne;
+                }
+                else
+                {
+                    ShouldShowGuide = Visibility.Collapsed;
+                    CurrentActiveFunction = Properties.Resources.ActiveModeSelecting;
+                    UserGuide = string.Empty;
+                }
             }
         }
         public bool IsMeasureVisible { get; set; } = false;
+
+        public Visibility ShouldShowGuide 
+        { 
+            get => _shouldShowGuide; 
+            set 
+            {
+                _shouldShowGuide = value;
+                NotifyPropertyChanged();
+            } 
+        }
+
+        public string CurrentActiveFunction
+        {
+            get => _currentActiveAction; 
+            set
+            {
+                _currentActiveAction = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public string UserGuide
+        {
+            get => _userGuide;
+            set
+            {
+                _userGuide = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         public event IsLoadedEventHandler IsLoadedEvent;
         public event PropertyChangedEventHandler PropertyChanged;

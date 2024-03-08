@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AESC_Eyeshot_Viewer.Properties
-{
-
-
+namespace AESC_Eyeshot_Viewer.Properties {
+    using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -19,52 +19,242 @@ namespace AESC_Eyeshot_Viewer.Properties
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources
-    {
-
+    public class Resources {
+        
         private static global::System.Resources.ResourceManager resourceMan;
-
+        
         private static global::System.Globalization.CultureInfo resourceCulture;
-
+        
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources()
-        {
+        internal Resources() {
         }
-
+        
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager
-        {
-            get
-            {
-                if ((resourceMan == null))
-                {
+        public static global::System.Resources.ResourceManager ResourceManager {
+            get {
+                if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AESC_Eyeshot_Viewer.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
             }
         }
-
+        
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture
-        {
-            get
-            {
+        public static global::System.Globalization.CultureInfo Culture {
+            get {
                 return resourceCulture;
             }
-            set
-            {
+            set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Active mode:.
+        /// </summary>
+        public static string ActiveModeLabel {
+            get {
+                return ResourceManager.GetString("ActiveModeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to measuring.
+        /// </summary>
+        public static string ActiveModeMeasuring {
+            get {
+                return ResourceManager.GetString("ActiveModeMeasuring", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to selecting.
+        /// </summary>
+        public static string ActiveModeSelecting {
+            get {
+                return ResourceManager.GetString("ActiveModeSelecting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drop one or more STEP and/or DXF files in this area to open them.
+        /// </summary>
+        public static string DropToLoadFilesText {
+            get {
+                return ResourceManager.GetString("DropToLoadFilesText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not open this file in the viewer, try again later.
+        /// </summary>
+        public static string FailedToOpenFileInViewer {
+            get {
+                return ResourceManager.GetString("FailedToOpenFileInViewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File format error.
+        /// </summary>
+        public static string GeneralFileFormatError {
+            get {
+                return ResourceManager.GetString("GeneralFileFormatError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open failure.
+        /// </summary>
+        public static string GeneralOpenFileFailure {
+            get {
+                return ResourceManager.GetString("GeneralOpenFileFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To use:.
+        /// </summary>
+        public static string GuideLabel {
+            get {
+                return ResourceManager.GetString("GuideLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Measure now displaying, click any other line to start measuring anew.
+        /// </summary>
+        public static string GuideMeasureComplete {
+            get {
+                return ResourceManager.GetString("GuideMeasureComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a line to start measuring.
+        /// </summary>
+        public static string GuideMeasureStepOne {
+            get {
+                return ResourceManager.GetString("GuideMeasureStepOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select another line to measure.
+        /// </summary>
+        public static string GuideMeasureStepTwo {
+            get {
+                return ResourceManager.GetString("GuideMeasureStepTwo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsupported selection, select first line to measure.
+        /// </summary>
+        public static string GuideMeasureUnsupportedSelection {
+            get {
+                return ResourceManager.GetString("GuideMeasureUnsupportedSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Info.
+        /// </summary>
+        public static string Info {
+            get {
+                return ResourceManager.GetString("Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Length:.
+        /// </summary>
+        public static string LengthInformationLabel {
+            get {
+                return ResourceManager.GetString("LengthInformationLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load Files.
+        /// </summary>
+        public static string LoadFilesTabHeader {
+            get {
+                return ResourceManager.GetString("LoadFilesTabHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading....
+        /// </summary>
+        public static string LoadingText {
+            get {
+                return ResourceManager.GetString("LoadingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can only load 1 file at a time by dragging and dropping here. To load more, go to the tab: Load Files.
+        /// </summary>
+        public static string MaxFileLoadLimitOnViewer {
+            get {
+                return ResourceManager.GetString("MaxFileLoadLimitOnViewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle measuring mode.
+        /// </summary>
+        public static string MeasureButtonTooltip {
+            get {
+                return ResourceManager.GetString("MeasureButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Measurement works only on Brep entities\r\nSelected item is of type.
+        /// </summary>
+        public static string MeasurementSelectionRestrictionMessage {
+            get {
+                return ResourceManager.GetString("MeasurementSelectionRestrictionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Radius:.
+        /// </summary>
+        public static string RadiusInformationLabel {
+            get {
+                return ResourceManager.GetString("RadiusInformationLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click on any line, curve, or object to see information regarding your selection.
+        /// </summary>
+        public static string SelectionDefaultInfoText {
+            get {
+                return ResourceManager.GetString("SelectionDefaultInfoText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show / Hide layers.
+        /// </summary>
+        public static string ShowOrHideLayerViewText {
+            get {
+                return ResourceManager.GetString("ShowOrHideLayerViewText", resourceCulture);
             }
         }
     }
