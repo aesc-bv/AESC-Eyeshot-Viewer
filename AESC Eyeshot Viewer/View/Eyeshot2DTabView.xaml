@@ -24,7 +24,7 @@
         </Grid.RowDefinitions>
 
         <WindowsFormsHost Name="WindowsFormHost" Grid.Column="0" Grid.Row="0">
-            <winforms:LayerListView x:Name="LayerView" ></winforms:LayerListView>
+            <local:LayerView x:Name="LayerView" ></local:LayerView>
         </WindowsFormsHost>
 
         <Button HorizontalAlignment="Center" 

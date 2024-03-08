@@ -114,6 +114,9 @@
     <Compile Include="Properties\Resources.nl-NL.Designer.cs" />
     <Compile Include="ViewModel\EyeshotDesignViewModel.cs" />
     <Compile Include="ViewModel\EyeshotTabViewModel.cs" />
+    <Compile Include="View\LayerView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ViewModel\MainTabHeaderViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\MeasureSupporting2DEyeshotDesign.cs" />
